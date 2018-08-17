@@ -1,57 +1,54 @@
 ---
-# Only the main Sass file needs front matter (the dashes are enough)
 ---
-@charset "utf-8";
+// CSS Style Guide: http://codeguide.co/#css
 
 
-@import
 
-    "skins/{{ site.text_skin | default: site.data.variables.default.text_skin }}",
-    // "skins/chocolate",
-    // "skins/dark",
-    // "skins/default",
-    // "skins/forest",
-    // "skins/ocean",
-    // "skins/orange",
-
-    "skins/highlight/{{ site.highlight_theme | default: site.data.variables.default.highlight_theme }}",
-    // "skins/highlight/tomorrow",
-    // "skins/highlight/tomorrow-night",
-    // "skins/highlight/tomorrow-night-eighties",
-    // "skins/highlight/tomorrow-night-blue",
-    // "skins/highlight/tomorrow-night-bright",
+$scheme    : '{{ site.scheme | default: Muse }}';
+$variables : base $scheme custom;
+$mixins    : base $scheme custom;
 
 
-    "common/variables",
-    "common/function",
-    "common/classes",
-    "common/reset",
-    "common/components/button",
-    "common/components/card",
-    "common/components/menu",
-    "common/components/toc",
+{% include _helper/config_map.html %}
+$jekyll-config-map : {{ config_map }};
 
-    "animate/fade-in",
-    "animate/fade-in-down",
-    "animate/fade-in-up",
+@function jekyll-config($key) {
+  @return map-get($jekyll-config-map, $key);
+}
 
-    "components/article-info",
-    "components/article-content",
-    "components/author-links",
-    "components/author-profile",
-    "components/footer",
-    "components/header",
-    "components/main",
-    "components/tags",
+// Variables Layer
+// --------------------------------------------------
+@import "_variables/base";
+@import "_variables/{{ site.scheme | default: Muse }}";
+@import "_variables/custom";
 
-    "additional/alert",
-    "additional/photo-frame",
+// Mixins Layer
+// --------------------------------------------------
+@import "_mixins/base";
+@import "_mixins/{{ site.scheme | default: Muse }}";
+@import "_mixins/custom";
 
-    "layout/archive",
-    "layout/article",
-    "layout/base",
-    "layout/home",
-    "layout/landing",
-    "layout/page",
-    "layout/404"
-;
+
+
+// Common Layer
+// --------------------------------------------------
+
+// Scaffolding
+@import "_common/scaffolding/scaffolding";
+
+// Layout
+@import "_common/outline/outline";
+
+// Components
+@import "_common/components/components";
+
+
+// Schemes Layer
+// --------------------------------------------------
+@import "_schemes/{{ site.scheme | default: Muse }}/index";
+
+
+
+// Custom Layer
+// --------------------------------------------------
+@import "_custom/custom";
