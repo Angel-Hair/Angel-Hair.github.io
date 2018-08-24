@@ -4,9 +4,9 @@
 # ---------------------------------------------------------------
 
 # Site
-title: Cat room
+title: Cat Room
 subtitle:
-description: AH's blog
+description: _(:зゝ∠)_
 author: Angel Hair
 # Support language: de, en, fr-FR, id, ja, ko, pt-BR, pt, ru, zh-Hans, zh-hk, zh-tw
 language: zh-Hans
@@ -143,7 +143,7 @@ menu_icons:
   archives: archive
   sitemap: sitemap
   commonweal: heartbeat
-  recommendation: globe-asia
+  recommendation: telegram-plane
 
 
 
@@ -218,8 +218,8 @@ font:
 social:
   #LinkLabel: Link
   email: mailto:Angel_Hair@protonmail.com
-  Github: https://github.com/Angel-Hair
   知乎: https://www.zhihu.com/people/angel-hair-2
+  Github: https://github.com/Angel-Hair
 
 
 # Social Links Icons
@@ -288,11 +288,12 @@ sidebar:
 
 
 # Blog rolls
-#links_title: Links
+links_title: Links
 #links_layout: block
-#links_layout: inline
-#links:
-  #Title: http://example.com/
+links_layout: inline
+links:
+  #Litle: http://example.com/
+  NexT: https://github.com/iissnan/hexo-theme-next
 
 
 # ---------------------------------------------------------------
@@ -387,8 +388,8 @@ han: false
 
 # Disqus
 disqus:
-  enable: false
-  shortname:
+  enable: true
+  shortname: https-angel-hair-github-io
   count: true
   # hide comments (visitors need to click to load the comments)
   # count need to be false when hide is true
