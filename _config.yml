@@ -119,11 +119,11 @@ index_with_subtitle: false
 menu:
   home: /
   categories: /categories/
-  archives: /archives/
   tags: /tags/
+  archives: /archives/
   #sitemap: /sitemap.xml
   #commonweal: /404.html
-  recommendation: /recommendation/
+  #recommendation: /recommendation/
   about: /about/
 
 
@@ -143,7 +143,7 @@ menu_icons:
   archives: archive
   sitemap: sitemap
   commonweal: heartbeat
-  recommendation: flag
+  #recommendation: flag
 
 
 
@@ -217,9 +217,9 @@ font:
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
 social:
   #LinkLabel: Link
-  email: mailto:Angel_Hair@protonmail.com
   知乎: https://www.zhihu.com/people/angel-hair-2
   Github: https://github.com/Angel-Hair
+  email: mailto:Angel_Hair@protonmail.com
 
 
 # Social Links Icons
