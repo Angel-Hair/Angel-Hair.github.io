@@ -4,9 +4,9 @@
 # ---------------------------------------------------------------
 
 # Site
-title: cat room
+title: Cat room
 subtitle:
-description: a test blog
+description: AH's blog
 author: Angel Hair
 # Support language: de, en, fr-FR, id, ja, ko, pt-BR, pt, ru, zh-Hans, zh-hk, zh-tw
 language: zh-Hans
@@ -118,12 +118,13 @@ index_with_subtitle: false
 # When running the site in a subdirectory (e.g. domain.tld/blog), remove the leading slash (/archives -> archives)
 menu:
   home: /
-  #categories: /categories/
-  about: /about/
+  categories: /categories/
   archives: /archives/
   tags: /tags/
   #sitemap: /sitemap.xml
   #commonweal: /404.html
+  recommendation: /recommendation/
+  about: /about/
 
 
 # Enable/Disable menu icons.
@@ -142,6 +143,7 @@ menu_icons:
   archives: archive
   sitemap: sitemap
   commonweal: heartbeat
+  recommendation: globe-asia
 
 
 
@@ -213,8 +215,11 @@ font:
 # Social Links
 # Key is the link label showing to end users.
 # Value is the target link (E.g. GitHub: https://github.com/iissnan)
-#social:
+social:
   #LinkLabel: Link
+  email: mailto:Angel_Hair@protonmail.com
+  Github: https://github.com/Angel-Hair
+  知乎: https://www.zhihu.com/people/angel-hair-2
 
 
 # Social Links Icons
@@ -229,6 +234,8 @@ social_icons:
   GitHub: github
   Twitter: twitter
   Weibo: weibo
+  知乎: zhihu
+  email: envelope
 
 
 # Sidebar Avatar
