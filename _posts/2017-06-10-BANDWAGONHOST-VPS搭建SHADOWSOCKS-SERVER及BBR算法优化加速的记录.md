@@ -115,9 +115,9 @@ KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操
 > nano /etc/rc.local
 
 在文档最后加入以下代码：
-
-> ssserver -c /etc/shadowsocks.json -d start
-
+```
+ssserver -c /etc/shadowsocks.json -d start
+```
 然后可以reboot试一下了。
 
 另外前端启动执行：
@@ -137,7 +137,10 @@ KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操
 # 第五步：BBR算法优化
 
 因为在Google在Kernel 4.9内核上加入BBR算法，所以需要将服务器内核更新为4.9以上，输入：`uname –r`查看当前系统内核。我这里的内核是4.4的版本，所以需要更新更新方法如下：
-到Ubuntu网站 http://kernel.ubuntu.com/~kernel-ppa/mainline/ 查找所需Ubuntu内核版本目录，如：http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb ，然后输入：
+到Ubuntu网站 http://kernel.ubuntu.com/~kernel-ppa/mainline/ 查找所需Ubuntu内核版本目录。
+*如：http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb*
+
+然后输入：
 
 > wget http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb
 
