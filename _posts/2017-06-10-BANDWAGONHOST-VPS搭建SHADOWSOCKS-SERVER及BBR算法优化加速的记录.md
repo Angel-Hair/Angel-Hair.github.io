@@ -40,25 +40,25 @@ tags:
 
 在买好主机后（这里我买的是KVM架构，数据中心选的是洛杉矶QNET，因为采用了亚洲优化路线），登录到KiwiVM管理面板，准备把系统改成Ubuntu（~~没错，朱军，我喜欢debian系！⊂彡☆))∀`)~ 因为我最近一直在用Xbuntu，比较熟悉嘛。）
 
-![菜单栏](..\img\2018\1.PNG)
-![管理面板](..\img\2018\2.PNG)
+![菜单栏](\img\2018\1.PNG)
+![管理面板](\img\2018\2.PNG)
 
 首先在主管理界面点击“STOP”关机，然后通过左侧“Install new OS”进入系统选择页面，选择你想要改成的系统，并勾选“I agree that…”
 
-![系统选择](..\img\2018\3.PNG)
+![系统选择](\img\2018\3.PNG)
 
 成功后会转到提示，并会给出系统自动生成的root密码和SSH端口（同时还会发送相关邮件给你）。
 
-![邮件](..\img\2018\4.PNG)
+![邮件](\img\2018\4.PNG)
 
 KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操作，换用Xshell连接服务器。安装好Xshell后，点击左上角“新建”，在弹出的对话框依次填入VPS商在邮件里给出信息（值得一提的是Bandwagonhost指定了SSH端口，请填写正确；如果vps商没有指定，默认的22端口就行了）。
 
-![Xshell](..\img\2018\5.PNG)
-![Xshell](..\img\2018\6.PNG)
+![Xshell](\img\2018\5.PNG)
+![Xshell](\img\2018\6.PNG)
 
 当你填好后，进入模拟终端界面了，输入指令`apt-get update`，我这里遇到了`dpkg was interrupted, you must manually run 'dpkg --configure -a' to correct the problem.`的报错，删掉/var/lib/dpkg/lock以及/var/lib/dpkg/updates/*，再重新update就好了。
 
-![Shell](..\img\2018\7.PNG)
+![Shell](\img\2018\7.PNG)
 
 # 第四步：配置SHADOWSOCKS SERVER
 
