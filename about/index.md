@@ -40,6 +40,7 @@ type: about
         * [夜莺与玫瑰](http://search.dangdang.com/?key=%D2%B9%DD%BA%D3%EB%C3%B5%B9%E5%20%CC%B8%E5%AD%D6%DE&act=input)
         * [和谐](https://zh.wikipedia.org/wiki/%E5%92%8C%E8%AB%A7_(%E5%B0%8F%E8%AA%AA))
         * [人间词话](http://search.dangdang.com/?key=%C8%CB%BC%E4%B4%CA%BB%B0&act=input)
+        * [浮生六记](http://search.dangdang.com/?key=%B8%A1%C9%FA%C1%F9%BC%C7&act=input)
     * 技术~~(不务正业)~~
         * [建筑绘图](http://product.dangdang.com/23289230.html)
         * [与骸骨交谈：我希望每一个案件都有答案](http://search.dangdang.com/?key=%D3%EB%BA%A1%B9%C7%BD%BB%CC%B8&act=input)
