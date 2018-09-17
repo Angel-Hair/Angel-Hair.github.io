@@ -33,13 +33,15 @@ tags:
 # 安装 Eclipse
 
 到官网([https://www.eclipse.org/downloads/packages/](https://www.eclipse.org/downloads/packages/))找到你需要的Packages，我这里下载的是“Eclipse IDE for Java Developers”。
+
 再将下载的包解压到 /usr 目录下：
 
 > tar -xzvf eclipse-java-photon-R-linux-gtk-x86_64.tar.gz -C /usr
 
-再到目录下运行试试
+到目录下运行试试
 
 > cd /usr/eclipse
+
 > ./eclipse
 
 如果安装成功，软件就已经打开了。
@@ -49,10 +51,13 @@ tags:
 # 在Gnome下配置Eclipse图标
 
 我现在用的是Gnome桌面（~~曾经我也是个KDE派，直到我遇到了Flat主题(;´Д`)~~），图标配置起来比较麻烦，KDE要好些...
+
 如果只想当前用户可见的话，在 .local/share/applications/ 路径下创建 "eclipse-photon.desktop" 文件。如果想让所有用户都能看见的话在 /usr/share/applications/ 路径下创建。
 
 > su
+
 > cd /usr/share/applications
+
 > nano eclipse-photon.desktop
 
 输入以下内容：
