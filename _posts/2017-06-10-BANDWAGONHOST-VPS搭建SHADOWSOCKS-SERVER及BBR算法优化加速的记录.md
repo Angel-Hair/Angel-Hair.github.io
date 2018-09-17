@@ -14,8 +14,6 @@ tags:
 这篇文章是我在刚上大学时因为要查找各种资料，不得不搭建ss服务器时的方便记录，写得十分粗糙请见谅。
 **另外，请不要将文章中的知识用于越界法律的研究！**
 
-<!-- more -->
-
 # 第一步：买好你的VPS
 
 参考 https://zhuanlan.zhihu.com/p/33887156 选择了Bandwagonhost主机商，购买参考：http://www.cnhawkit.com/328.html。
