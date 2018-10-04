@@ -64,6 +64,7 @@ type: about
     * [迅雷极速版](https://tieba.baidu.com/f?kw=%D1%B8%C0%D7%BC%AB%CB%D9%B0%E6&fr=ala0&tpl=5)
     * [Foobar2000](http://www.foobar2000.org/)
     * [VLC](https://www.videolan.org/index.zh.html)
+    * [RPG Maker MV](https://store.steampowered.com/app/363890/RPG_Maker_MV/)
 * 游戏
     * [VA-11 HALL-A: Cyberpunk Bartender Action](http://waifubartending.com/)
     * [OSU!](https://osu.ppy.sh/home)
@@ -72,6 +73,9 @@ type: about
     * [The Elder Scrolls V: Skyrim](https://store.steampowered.com/app/72850/The_Elder_Scrolls_V_Skyrim/)
     * [DARK SOULS III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
     * [Fox Hime Zero](https://store.steampowered.com/app/844930/Fox_Hime_Zero/)
+    * [i wanna 系列](https://tieba.baidu.com/f?kw=iwanna&fr=ala0&tpl=5)
+    * [Battlefield 系列](https://www.ea.com/games/battlefield)
+    * [天国的SD敢达Online](https://zh.wikipedia.org/wiki/SD_GUNDAM_Online)
 * 番剧(过多、未完全)
     * [NO GAME NO LIFE](https://www.bilibili.com/bangumi/media/md184/)
     * [悠哉日常大王](https://zh.wikipedia.org/wiki/%E6%82%A0%E6%82%A0%E5%93%89%E5%93%89%E5%B0%91%E5%A5%B3%E6%97%A5%E5%92%8C)
