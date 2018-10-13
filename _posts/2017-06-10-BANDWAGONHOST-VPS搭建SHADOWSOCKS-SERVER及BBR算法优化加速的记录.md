@@ -78,7 +78,8 @@ KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操
 > nano /etc/shadowsocks.json
 
 编辑文件输入以下内容：
-```
+
+```json
 {
 "server":"my_server_ip",
 "server_port": 1234,
@@ -91,6 +92,7 @@ KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操
 "workers":1
 }
 ```
+
 含义如下：
 
 * server：vps的IP地址 
@@ -102,12 +104,14 @@ KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操
 * workers：workers数量，默认为 1。
 
 另外，若是多用户模式，将server_port和password合并为port_password，如下：
-```
+
+```json
 "port_password": {
          "443": " mypassword 1”, 
          "8888": " mypassword 2”
 },
 ```
+
 填完保存后，接下来设置ss开机自启，执行：
 
 > nano /etc/rc.local
@@ -170,7 +174,7 @@ ssserver -c /etc/shadowsocks.json -d start
 
 如果这两个输出都有“bbr”，则你的内核已经开启了bbr，执行`lsmod | grep bbr`看到有“tcp_bbr”模块即说明 bbr 已启动。
 
-至此所有的配置已完毕。
+至此，所有的配置已完毕。
 
 # 第六步：客户端测试
 
