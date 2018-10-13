@@ -38,7 +38,9 @@ tags:
 
 前两个还好，一般来讲直接就可以装上，但最后一个Python Extension Pack因为微软引入了刚发布的发布 Python 语言服务器([Python Language Server](https://www.oschina.net/news/98235/introducing-the-python-language-server))，可能会报错，所以我们需要在用户设置里添加以下代码：
 
-> "python.jediEnabled": false,  //指示是使用Jedi作为IntelliSense引擎（true）还是Microsoft Python语言服务器（false）
+```json
+"python.jediEnabled": false,  //指示是使用Jedi作为IntelliSense引擎（true）还是Microsoft Python语言服务器（false）
+```
 
 如果需要单独安装Python Language Server，直接`pip install python-language-server`就行了。
 
@@ -86,7 +88,7 @@ Linux下的命令和上面windows的差不多，读者可以自行判别。
 
 2、virtualenv
 
-virtualenv可以参考这篇文章：[https://www.cnblogs.com/yixuetang/p/8359856.html](https://www.cnblogs.com/yixuetang/p/8359856.html) 这里就不再详细描写了(~~突然变懒，逃|∀ﾟ~~)。
+virtualenv可以参考这篇文章：[https://www.cnblogs.com/yixuetang/p/8359856.html](https://www.cnblogs.com/yixuetang/p/8359856.html) 这里就不再详细描写了。
 
 搭建好了以后就可以重启vscode测试了。
 
@@ -97,6 +99,6 @@ virtualenv可以参考这篇文章：[https://www.cnblogs.com/yixuetang/p/835985
 如果切换成功的话，这时左下角的图标就已经改变了：
 ![left-change](\img\2018\15.PNG)
 
-如果没有图标也可以使用命命令行 ctrl +p 然后输入 python:select interpreter
+如果没有图标也可以使用命命令行'ctrl +p'然后输入`python:select interpreter`
 
 至此，所有的配置已完毕。
