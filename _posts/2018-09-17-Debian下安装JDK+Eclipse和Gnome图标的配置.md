@@ -61,7 +61,8 @@ tags:
 > nano eclipse-photon.desktop
 
 输入以下内容：
-```
+
+```.desktop
 [Desktop Entry]
 Type=Application
 Name=eclipse
@@ -73,7 +74,9 @@ Terminal=false
 Categories=Development;IDE;
 StartupNotify=true
 ```
+
 含义如下：
+
 * Name: 程序快捷方式的名称
 * Comment: 程序快捷方式的描述
 * Exec: 程序可执行文件的路径
