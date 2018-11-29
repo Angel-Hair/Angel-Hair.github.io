@@ -44,6 +44,7 @@ type: about
         * [浮生六记](http://search.dangdang.com/?key=%B8%A1%C9%FA%C1%F9%BC%C7&act=input)
         * [呐喊](http://search.dangdang.com/?key=%C4%C5%BA%B0&act=input)
         * [牛山四十屁](https://www.douban.com/note/536191308/)
+        * [ここは今から倫理です。](https://ja.wikipedia.org/wiki/%E3%81%93%E3%81%93%E3%81%AF%E4%BB%8A%E3%81%8B%E3%82%89%E5%80%AB%E7%90%86%E3%81%A7%E3%81%99%E3%80%82)
     * 技术~~(不务正业)~~
         * [建筑绘图](http://product.dangdang.com/23289230.html)
         * [与骸骨交谈：我希望每一个案件都有答案](http://search.dangdang.com/?key=%D3%EB%BA%A1%B9%C7%BD%BB%CC%B8&act=input)
@@ -52,6 +53,7 @@ type: about
         * [C++ Primer](http://search.dangdang.com/?key=c%2B%2B%20primer&act=input)
         * [人工智能：一种现代的方法](http://search.dangdang.com/?key=%C8%CB%B9%A4%D6%C7%C4%DC%A3%BA%D2%BB%D6%D6%CF%D6%B4%FA%B5%C4%B7%BD%B7%A8&act=input)
         * [Python基础教程](http://product.dangdang.com/25218035.html)
+        * [Python网络数据采集](http://product.dangdang.com/23928876.html)
         * [Head First Java](http://product.dangdang.com/9265169.html)
         * [离散数学](http://product.dangdang.com/23917146.html)
 * 软件
