@@ -167,7 +167,6 @@ type: about
     * [幽玄花影](https://music.163.com/album?id=2640871&userid=134956218)
     * [Blue Regret](https://music.163.com/album?id=3177068&userid=134956218)
     * 以及尚未听完的天国的夏尔音乐专辑
-    
 
 # Browser support
 
