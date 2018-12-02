@@ -56,6 +56,7 @@ type: about
         * [Python网络数据采集](http://product.dangdang.com/23928876.html)
         * [Head First Java](http://product.dangdang.com/9265169.html)
         * [离散数学](http://product.dangdang.com/23917146.html)
+        * [Unix&Linux大学教程](http://product.dangdang.com/25343078.html)
 * 软件
     * [Stellarium](https://stellarium.org/)
     * [Adobe Photoshop cc](https://www.adobe.com/products/photoshop.html)
