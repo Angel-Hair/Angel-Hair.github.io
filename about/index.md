@@ -76,6 +76,7 @@ type: about
     * [OSU!](https://osu.ppy.sh/home)
     * [No Man's Sky](https://store.steampowered.com/app/275850/No_Mans_Sky/)
     * [Tom Clancy's Rainbow Six](https://rainbow6.ubisoft.com/siege/en-us/home/)
+    * [Arma 3](https://store.steampowered.com/app/107410/Arma_3/)
     * [Guild Wars 2](https://www.guildwars2.com/en/)
     * [The Elder Scrolls V: Skyrim](https://store.steampowered.com/app/72850/The_Elder_Scrolls_V_Skyrim/)
     * [DARK SOULS III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
