@@ -68,6 +68,12 @@ next_index_1 = ['天使轮','A轮','B轮','C轮','D轮及以上','上市公司',
 next_financing = show_financing.reindex(next_index_1)
 ```
 
+## 多列多条件提取对应行
+
+```python
+data_t = data_cp[(data_cp['latitude']>31.29) & (data_cp['latitude']<31.76) & (data_cp['longitude']>121) & (data_cp['longitude']<122)]
+```
+
 # 修改
 
 ## 匹配多个字符串并修改为某个字符串（正则）
@@ -96,4 +102,16 @@ next_df=text_df[~text_df['招聘人数'].isin([0])]
 
 ```python
 show_positio_mean = show_positio_mean.round(2)
+```
+
+## 重建索引
+
+```python
+data_pc = data_t.reset_index(drop=True)
+```
+
+## 合并其他数据的多个列
+
+```python
+new_data = df.join(data_pc[['longitude', 'latitude']])
 ```

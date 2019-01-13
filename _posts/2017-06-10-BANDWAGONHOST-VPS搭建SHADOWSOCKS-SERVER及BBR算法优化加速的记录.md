@@ -24,6 +24,7 @@ tags:
 # 第二步：查找ss服务器配置的相关文章
 
 相关文章列表（部分内容需要翻墙！）：
+
 * https://zhuanlan.zhihu.com/p/31513383
 * https://zhuanlan.zhihu.com/p/36121716
 * https://www.diycode.cc/topics/738
@@ -117,9 +118,11 @@ KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操
 > nano /etc/rc.local
 
 在文档最后加入以下代码：
-```
+
+```.bash
 ssserver -c /etc/shadowsocks.json -d start
 ```
+
 然后可以reboot试一下了。
 
 另外前端启动执行：
