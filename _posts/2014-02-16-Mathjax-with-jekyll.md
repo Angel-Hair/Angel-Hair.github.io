@@ -5,11 +5,7 @@ date: 2014-02-16
 categories: opinion
 tags: [resources, jekyll]
 image: http://gastonsanchez.com/images/blog/mathjax_logo.png
-tags:
-mathjax: true
 ---
-
-now test_3
 
 One of the rewards of switching my website to [Jekyll](http://jekyllrb.com/) is the
 ability to support **MathJax**, which means I can write LaTeX-like equations that get
