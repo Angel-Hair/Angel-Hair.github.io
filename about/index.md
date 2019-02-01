@@ -115,6 +115,8 @@ type: about
     * [结城友奈是勇者](https://www.bilibili.com/bangumi/media/md95992/)
     * [灰色的果实](https://www.bilibili.com/bangumi/media/md95972/)
     * [人类衰退之后](https://www.bilibili.com/bangumi/media/md703/)
+    * [吹响！悠风号](https://www.bilibili.com/bangumi/media/md1547)
+    * [钢琴之森](https://www.bilibili.com/bangumi/media/md4769)
 * 专辑(东方、V家的专辑太多，就不一一列出了~~我 ! 全 ! 都 ! 要 ! (*ﾟ∇ﾟ)~~)
     * [Re:Start](https://music.163.com/album?id=36037546)
     * [Cyber Meteoroid](https://music.163.com/album?id=37087181)
