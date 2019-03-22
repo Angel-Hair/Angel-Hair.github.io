@@ -45,7 +45,7 @@ type: about
         * [呐喊](http://search.dangdang.com/?key=%C4%C5%BA%B0&act=input)
         * [牛山四十屁](https://www.douban.com/note/536191308/)
         * [ここは今から倫理です。](https://ja.wikipedia.org/wiki/%E3%81%93%E3%81%93%E3%81%AF%E4%BB%8A%E3%81%8B%E3%82%89%E5%80%AB%E7%90%86%E3%81%A7%E3%81%99%E3%80%82)
-    * 技术~~(不务正业)~~
+    * 学术~~(不务正业)~~
         * [建筑绘图(Leon Krier)](http://product.dangdang.com/23289230.html)
         * [与骸骨交谈：我希望每一个案件都有答案(William R. Maples)](http://search.dangdang.com/?key=%D3%EB%BA%A1%B9%C7%BD%BB%CC%B8&act=input)
         * [计算机体系结构：量化研究方法(John L.Hennessy & David A.Patterson)](http://product.dangdang.com/22938644.html)
@@ -58,6 +58,8 @@ type: about
         * [Unix&Linux大学教程(Hahn H.)](http://product.dangdang.com/25343078.html)
         * [算法(Robert Sedgewick & Kevin Wayne)](http://product.dangdang.com/22880871.html)
         * [Python数据科学手册(Jake VanderPlas)](http://product.dangdang.com/25228733.html)
+        * [Neural Networks and Deep Learning(Michael Nielsen)](http://neuralnetworksanddeeplearning.com/)
+        * [计算方法(王能超)](https://book.douban.com/subject/6011502/)
 * 软件
     * [Stellarium](https://stellarium.org/)
     * [Adobe Photoshop cc](https://www.adobe.com/products/photoshop.html)
