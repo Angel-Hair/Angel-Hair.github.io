@@ -60,6 +60,7 @@ type: about
         * [Python数据科学手册(Jake VanderPlas)](http://product.dangdang.com/25228733.html)
         * [Neural Networks and Deep Learning(Michael Nielsen)](http://neuralnetworksanddeeplearning.com/)
         * [计算方法(王能超)](https://book.douban.com/subject/6011502/)
+        * [常微分方程(Л.C.庞特里亚金)](https://book.douban.com/subject/2083796/)
 * 软件
     * [Stellarium](https://stellarium.org/)
     * [Adobe Photoshop cc](https://www.adobe.com/products/photoshop.html)
@@ -83,6 +84,7 @@ type: about
     * [Guild Wars 2](https://www.guildwars2.com/en/)
     * [The Elder Scrolls V: Skyrim](https://store.steampowered.com/app/72850/The_Elder_Scrolls_V_Skyrim/)
     * [DARK SOULS III](https://store.steampowered.com/app/374320/DARK_SOULS_III/)
+    * [Sekiro™: Shadows Die Twice](https://store.steampowered.com/app/814380/Sekiro_Shadows_Die_Twice/)
     * [Fox Hime Zero](https://store.steampowered.com/app/844930/Fox_Hime_Zero/)
     * [SHENZHEN I/O](https://store.steampowered.com/app/504210/SHENZHEN_IO/)
     * [i wanna 系列](https://tieba.baidu.com/f?kw=iwanna&fr=ala0&tpl=5)
