@@ -42,7 +42,7 @@ $$\begin{eqnarray} \Delta \mbox{output} \approx \sum_j \frac{\partial \, \mbox{o
 
 $$\begin{eqnarray} C(w,b) \equiv \frac{1}{2n} \sum_x \| y(x) - a\|^2. \tag{6}\end{eqnarray}$$
 
-其他形式有：
+其他形式有:
 
 $$\begin{eqnarray} C = \frac{1}{2n} \sum_x \|y(x)-a^L(x)\|^2, \tag{26}\end{eqnarray}$$
 
@@ -86,11 +86,11 @@ $$\begin{eqnarray} w_k & \rightarrow & w_k' = w_k-\frac{\eta}{m} \sum_j \frac{\p
 
 第$l$层的第$j$个神经元的激活值: $a^l_j$
 
-激活值 $a^l_j$ 公式：
+激活值 $a^l_j$ 公式:
 
 $$\begin{eqnarray} a^{l}_j = \sigma\left( \sum_k w^{l}_{jk} a^{l-1}_k + b^l_j \right) \tag{23}\end{eqnarray}$$
 
-其矩阵形式为：
+其矩阵形式为:
 
 $$\begin{eqnarray} a^{l} = \sigma(w^l a^{l-1}+b^l).\tag{25}\end{eqnarray}$$
 
@@ -98,16 +98,56 @@ $$\begin{eqnarray} a^{l} = \sigma(w^l a^{l-1}+b^l).\tag{25}\end{eqnarray}$$
 
 $$z^l_j= \sum_k w^l_{jk} a^{l-1}_k+b^l_j$$
 
-其矩阵形式：
+其矩阵形式:
 
 $$z^l \equiv w^l a^{l-1}+b^l$$
 
 ## 关于代价函数的两个假设
 
-代价函数的第一假设形式：
+代价函数的第一假设形式:
 
 $$C=\frac{1}{n} \sum_x C_x$$
 
 第二假设中单一训练样本$x$的二次代价:
 
-$$\begin{eqnarray} C_x = \frac{1}{2} \|y-a^L\|^2 = \frac{1}{2} \sum_j (y_j-a^L_j)^2, \tag{27}\end{eqnarray}$$
+$$\begin{eqnarray} C_x = \frac{1}{2} \|y-a^L\|^2 = \frac{1}{2} \sum_j (y_j-a^L_j)^2 \tag{27}\end{eqnarray}$$
+
+## Hadamard积
+
+$$(s \odot t)_j = s_j t_j$$
+
+## 反向传播背后的四个基本等式
+
+$l$层的$j$神经元的错误量(error):$\delta^l_j$
+
+错误量定义:
+
+$$\begin{eqnarray} \delta^l_j \equiv \frac{\partial C}{\partial z^l_j} \tag{29}\end{eqnarray}$$
+
+输出层中关于错误量$\delta^L$的等式(BP1):
+
+$$\begin{eqnarray} \delta^L_j = \frac{\partial C}{\partial a^L_j} \sigma'(z^L_j) \tag{BP1}\end{eqnarray}$$
+
+BP1的矩阵形式:
+
+$$\begin{eqnarray} \delta^L = (a^L-y) \odot \sigma'(z^L). \tag{30}\end{eqnarray}$$
+
+依据下一层错误量$\delta^{l+1}$获取错误量$\delta^l$的矩阵形式(BP2):
+
+$$\begin{eqnarray} \delta^l = ((w^{l+1})^T \delta^{l+1}) \odot \sigma'(z^l) \tag{BP2}\end{eqnarray}$$
+
+网络的代价函数相对于偏置的改变速率的等式(BP3):
+
+$$\begin{eqnarray} \frac{\partial C}{\partial b^l_j} = \delta^l_j \tag{BP3}\end{eqnarray}$$
+
+BP3的简略式:
+
+$$\begin{eqnarray} \frac{\partial C}{\partial b} = \delta \tag{31}\end{eqnarray}$$
+
+网络的代价函数相对于权重的改变速率的等式(BP4):
+
+$$\begin{eqnarray} \frac{\partial C}{\partial w^l_{jk}} = a^{l-1}_k \delta^l_j \tag{BP4}\end{eqnarray}$$
+
+BP4的简略式:
+
+$$\begin{eqnarray} \frac{\partial C}{\partial w} = a_{\rm in} \delta_{\rm out} \tag{32}\end{eqnarray}$$
