@@ -153,3 +153,7 @@ $$\begin{eqnarray} \frac{\partial C}{\partial w^l_{jk}} = a^{l-1}_k \delta^l_j \
 BP4的简略式:
 
 $$\begin{eqnarray} \frac{\partial C}{\partial w} = a_{\rm in} \delta_{\rm out} \tag{32}\end{eqnarray}$$
+
+# 后记
+
+说来也奇怪，我在追吴恩达博士的课的时候，学到吴恩达介绍Yann LeCun的一段video的那段视频，刚好是公布Yann LeCun荣获2018年图灵奖开始的时候。
