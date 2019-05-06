@@ -23,6 +23,10 @@ type: about
 
 嘛嘛~这位客官，虽然小生不才，没有什么值得介绍的地方，但是我也有许多可以和你推荐的东西啊，所以还是放下手里的砖块，咱们有话好好说吧。
 
+# 目前状态
+
+![正确分类自己.jpg](/img/2019/1.jpg)
+
 # 关于"Angel Hair"
 
 我在网络上的一般性名字（然而用这个名字的人并不一定就是我，腚!），小时候看过一个自然科学文章后以此作为自己的网名之后再也没有改变过。
@@ -123,6 +127,8 @@ type: about
     * [吹响！悠风号](https://www.bilibili.com/bangumi/media/md1547)
     * [钢琴之森](https://www.bilibili.com/bangumi/media/md4769)
     * [飞翔的魔女](https://www.bilibili.com/bangumi/media/md98632)
+    * [×××HOLiC](https://www.bilibili.com/bangumi/media/md1239)
+    * [翼·年代记](https://www.bilibili.com/bangumi/media/md1463)
 * 专辑(东方、V家的专辑太多，就不一一列出了~~我 ! 全 ! 都 ! 要 ! (*ﾟ∇ﾟ)~~)
     * [Re:Start](https://music.163.com/album?id=36037546)
     * [Cyber Meteoroid](https://music.163.com/album?id=37087181)
