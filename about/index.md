@@ -39,7 +39,7 @@ type: about
 # 推荐（排名不分先后）
 
 * 书
-    * 文学
+    * 人文类
         * [人间失格](https://www.amazon.cn/gp/product/B00KVUNYZW/)
         * [夜莺与玫瑰](http://search.dangdang.com/?key=%D2%B9%DD%BA%D3%EB%C3%B5%B9%E5%20%CC%B8%E5%AD%D6%DE&act=input)
         * [和谐](https://zh.wikipedia.org/wiki/%E5%92%8C%E8%AB%A7_(%E5%B0%8F%E8%AA%AA))
@@ -49,7 +49,7 @@ type: about
         * [呐喊](http://search.dangdang.com/?key=%C4%C5%BA%B0&act=input)
         * [牛山四十屁](https://www.douban.com/note/536191308/)
         * [ここは今から倫理です。](https://ja.wikipedia.org/wiki/%E3%81%93%E3%81%93%E3%81%AF%E4%BB%8A%E3%81%8B%E3%82%89%E5%80%AB%E7%90%86%E3%81%A7%E3%81%99%E3%80%82)
-    * 学术~~(不务正业)~~
+    * 自然类~~(不务正业)~~
         * [建筑绘图(Leon Krier)](http://product.dangdang.com/23289230.html)
         * [与骸骨交谈：我希望每一个案件都有答案(William R. Maples)](http://search.dangdang.com/?key=%D3%EB%BA%A1%B9%C7%BD%BB%CC%B8&act=input)
         * [计算机体系结构：量化研究方法(John L.Hennessy & David A.Patterson)](http://product.dangdang.com/22938644.html)
@@ -82,6 +82,7 @@ type: about
 * 游戏
     * [VA-11 HALL-A: Cyberpunk Bartender Action](http://waifubartending.com/)
     * [OSU!](https://osu.ppy.sh/home)
+    * [malody](http://m.mugzone.net/)
     * [No Man's Sky](https://store.steampowered.com/app/275850/No_Mans_Sky/)
     * [Tom Clancy's Rainbow Six](https://rainbow6.ubisoft.com/siege/en-us/home/)
     * [Arma 3](https://store.steampowered.com/app/107410/Arma_3/)
