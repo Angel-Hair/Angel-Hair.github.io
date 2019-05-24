@@ -130,6 +130,7 @@ type: about
     * [飞翔的魔女](https://www.bilibili.com/bangumi/media/md98632)
     * [×××HOLiC](https://www.bilibili.com/bangumi/media/md1239)
     * [翼·年代记](https://www.bilibili.com/bangumi/media/md1463)
+    * [笨蛋，测验，召唤兽](https://www.bilibili.com/bangumi/media/md842)
 * 专辑(东方、V家的专辑太多，就不一一列出了~~我 ! 全 ! 都 ! 要 ! (*ﾟ∇ﾟ)~~)
     * [Re:Start](https://music.163.com/album?id=36037546)
     * [Cyber Meteoroid](https://music.163.com/album?id=37087181)
