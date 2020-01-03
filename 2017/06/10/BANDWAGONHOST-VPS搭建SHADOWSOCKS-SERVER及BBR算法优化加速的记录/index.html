@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Angel Hair">
+
+
+
+    <meta name="description" content="_(:зゝ∠)_">
+
+
+
+<title>BANDWAGONHOST VPS搭建SHADOWSOCKS SERVER及BBR算法优化加速的记录 | Cat Room</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cat Room</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cat Room</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">BANDWAGONHOST VPS搭建SHADOWSOCKS SERVER及BBR算法优化加速的记录</h1>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这篇文章是我在刚上大学时因为要查找各种资料，不得不搭建ss服务器时的方便记录，写得十分粗糙请见谅。<br><strong>另外，请不要将文章中的知识用于越界法律的研究！</strong></p>
+<h1 id="第一步：买好你的VPS"><a href="#第一步：买好你的VPS" class="headerlink" title="第一步：买好你的VPS"></a>第一步：买好你的VPS</h1><p>参考 <a href="https://zhuanlan.zhihu.com/p/33887156" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/33887156</a> 选择了Bandwagonhost主机商，购买参考：<a href="http://www.cnhawkit.com/328.html。" target="_blank" rel="noopener">http://www.cnhawkit.com/328.html。</a><br>参考 <a href="https://zhuanlan.zhihu.com/p/36121716，决定领取github" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36121716，决定领取github</a> student pack，用digitalocean主机商，尚未找到配置参考。</p>
+<p><del>发现领取github student pack太麻烦，Bandwagonhost刚好在打折，还是用第一种吧（逃）。</del></p>
+<h1 id="第二步：查找ss服务器配置的相关文章"><a href="#第二步：查找ss服务器配置的相关文章" class="headerlink" title="第二步：查找ss服务器配置的相关文章"></a>第二步：查找ss服务器配置的相关文章</h1><p>相关文章列表（部分内容需要翻墙！）：</p>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/31513383" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/31513383</a></li>
+<li><a href="https://zhuanlan.zhihu.com/p/36121716" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36121716</a></li>
+<li><a href="https://www.diycode.cc/topics/738" target="_blank" rel="noopener">https://www.diycode.cc/topics/738</a></li>
+<li><a href="https://banwagong.cn/ovz-kvm.html" target="_blank" rel="noopener">https://banwagong.cn/ovz-kvm.html</a></li>
+<li><a href="http://banwagong.cn/kvm-install-bbr.html" target="_blank" rel="noopener">http://banwagong.cn/kvm-install-bbr.html</a></li>
+<li><a href="https://www.bandwagonhost.net/" target="_blank" rel="noopener">https://www.bandwagonhost.net/</a></li>
+<li><a href="https://github.com/easonhuang123/blog/issues/1" target="_blank" rel="noopener">https://github.com/easonhuang123/blog/issues/1</a></li>
+<li><a href="https://moshuqi.github.io/2017/07/20/%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BAVPN%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_blank" rel="noopener">https://moshuqi.github.io/2017/07/20/%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BAVPN%E6%9C%8D%E5%8A%A1%E5%99%A8/</a></li>
+<li><a href="https://blog.csdn.net/allfun/article/details/53350214" target="_blank" rel="noopener">https://blog.csdn.net/allfun/article/details/53350214</a></li>
+</ul>
+<h1 id="第三步：简单配置"><a href="#第三步：简单配置" class="headerlink" title="第三步：简单配置"></a>第三步：简单配置</h1><p>在买好主机后（这里我买的是KVM架构，数据中心选的是洛杉矶QNET，因为采用了亚洲优化路线），登录到KiwiVM管理面板，准备把系统改成Ubuntu（<del>没错，朱军，我喜欢debian系！⊂彡☆))∀`)</del> 因为我最近一直在用Xbuntu，比较熟悉嘛。）</p>
+<p><img src="%5Cimg%5C2018%5C1.PNG" alt="菜单栏"><br><img src="%5Cimg%5C2018%5C2.PNG" alt="管理面板"></p>
+<p>首先在主管理界面点击“STOP”关机，然后通过左侧“Install new OS”进入系统选择页面，选择你想要改成的系统，并勾选“I agree that…”</p>
+<p><img src="%5Cimg%5C2018%5C3.PNG" alt="系统选择"></p>
+<p>成功后会转到提示，并会给出系统自动生成的root密码和SSH端口（同时还会发送相关邮件给你）。</p>
+<p><img src="%5Cimg%5C2018%5C4.PNG" alt="邮件"></p>
+<p>KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操作，换用Xshell连接服务器。安装好Xshell后，点击左上角“新建”，在弹出的对话框依次填入VPS商在邮件里给出信息（值得一提的是Bandwagonhost指定了SSH端口，请填写正确；如果vps商没有指定，默认的22端口就行了）。</p>
+<p><img src="%5Cimg%5C2018%5C5.PNG" alt="Xshell"><br><img src="%5Cimg%5C2018%5C6.PNG" alt="Xshell"></p>
+<p>当你填好后，进入模拟终端界面了，输入指令<code>apt-get update</code>，我这里遇到了<code>dpkg was interrupted, you must manually run &#39;dpkg --configure -a&#39; to correct the problem.</code>的报错，删掉/var/lib/dpkg/lock以及/var/lib/dpkg/updates/*，再重新update就好了。</p>
+<p><img src="%5Cimg%5C2018%5C7.PNG" alt="Shell"></p>
+<h1 id="第四步：配置SHADOWSOCKS-SERVER"><a href="#第四步：配置SHADOWSOCKS-SERVER" class="headerlink" title="第四步：配置SHADOWSOCKS SERVER"></a>第四步：配置SHADOWSOCKS SERVER</h1><p>先执行：</p>
+<blockquote>
+<p>apt-get install build-essential</p>
+</blockquote>
+<p>发现依赖关系报错。。。执行<code>apt-get -f install</code>后再重新执行命名就好了。<br>然后执行：</p>
+<blockquote>
+<p>apt-get install python-pip</p>
+</blockquote>
+<p>再装上ss：</p>
+<blockquote>
+<p>pip install shadowsocks</p>
+</blockquote>
+<p>接下来配置文件执行：</p>
+<blockquote>
+<p>nano /etc/shadowsocks.json</p>
+</blockquote>
+<p>编辑文件输入以下内容：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="attr">"server"</span>:<span class="string">"my_server_ip"</span>,</span><br><span class="line"><span class="attr">"server_port"</span>: <span class="number">1234</span>,</span><br><span class="line"><span class="attr">"local_address"</span>: <span class="string">"127.0.0.1"</span>,</span><br><span class="line"><span class="attr">"local_port"</span>: <span class="number">1080</span>,</span><br><span class="line"><span class="attr">"timeout"</span>:<span class="number">300</span>,</span><br><span class="line"><span class="attr">"password"</span>: <span class="string">"yourpassword"</span>,</span><br><span class="line"><span class="attr">"method"</span>:<span class="string">"aes-256-cfb"</span>,</span><br><span class="line"><span class="attr">"fast_open"</span>:<span class="literal">true</span>,</span><br><span class="line"><span class="attr">"workers"</span>:<span class="number">1</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>含义如下：</p>
+<ul>
+<li>server：vps的IP地址 </li>
+<li>server_port：服务器监听的端口，一般设为80，443等，注意不要设为使用中的端口 </li>
+<li>password：设置密码，自定义 </li>
+<li>timeout：超时时间（秒） </li>
+<li>method：加密方法，可选择 “aes-256-cfb”, “rc4-md5”等等。“rc4-md5” 速度快些，但“aes-256-cfb”密度大。</li>
+<li>fast_open：true 或 false。如果你的服务器 Linux 内核在3.7+，可以开启 fast_open 以降低延迟。 </li>
+<li>workers：workers数量，默认为 1。</li>
+</ul>
+<p>另外，若是多用户模式，将server_port和password合并为port_password，如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">"port_password": &#123;</span><br><span class="line">         "443": " mypassword 1”, </span><br><span class="line">         "8888": " mypassword 2”</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>填完保存后，接下来设置ss开机自启，执行：</p>
+<blockquote>
+<p>nano /etc/rc.local</p>
+</blockquote>
+<p>在文档最后加入以下代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssserver -c &#x2F;etc&#x2F;shadowsocks.json -d start</span><br></pre></td></tr></table></figure>
+
+<p>然后可以reboot试一下了。</p>
+<p>另外前端启动执行：</p>
+<blockquote>
+<p>ssserver -c /etc/shadowsocks.json</p>
+</blockquote>
+<p>后端启动，执行：<br>启动：</p>
+<blockquote>
+<p>ssserver -c /etc/shadowsocks.json -d start</p>
+</blockquote>
+<p>关闭：</p>
+<blockquote>
+<p>ssserver -c /etc/shadowsocks.json -d stop</p>
+</blockquote>
+<h1 id="第五步：BBR算法优化"><a href="#第五步：BBR算法优化" class="headerlink" title="第五步：BBR算法优化"></a>第五步：BBR算法优化</h1><p>因为在Google在Kernel 4.9内核上加入BBR算法，所以需要将服务器内核更新为4.9以上，输入<code>uname –r</code>查看当前系统内核。我这里的内核是4.4的版本，所以需要更新更新方法如下：<br>到Ubuntu网站 <a href="http://kernel.ubuntu.com/~kernel-ppa/mainline/" target="_blank" rel="noopener">http://kernel.ubuntu.com/~kernel-ppa/mainline/</a> 查找所需Ubuntu内核版本目录。</p>
+<p><em>如：<a href="http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb" target="_blank" rel="noopener">http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb</a></em></p>
+<p>然后输入：</p>
+<blockquote>
+<p>wget <a href="http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb" target="_blank" rel="noopener">http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb</a></p>
+</blockquote>
+<p>安装内核执行：</p>
+<blockquote>
+<p>dpkg -i linux-image-4.*.deb</p>
+</blockquote>
+<p>删除旧内核（可选）：</p>
+<blockquote>
+<p>dpkg -l | grep linux-image<br>apt-get purge 旧的内核  </p>
+</blockquote>
+<p>更新grub系统引导文件并重启：</p>
+<blockquote>
+<p>update-grub<br>reboot  </p>
+</blockquote>
+<p>开机后再次确认版本。<br>执行<code>lsmod | grep bbr</code>，如果结果中没有“tcp_bbr”的话就先执行：</p>
+<blockquote>
+<p>modprobe tcp_bbr<br>echo “tcp_bbr” &gt;&gt; /etc/modules-load.d/modules.conf<br>echo “net.core.default_qdisc=fq” &gt;&gt; /etc/sysctl.conf<br>echo “net.ipv4.tcp_congestion_control=bbr” &gt;&gt; /etc/sysctl.conf<br>sysctl -p<br>sysctl net.ipv4.tcp_available_congestion_control<br>sysctl net.ipv4.tcp_congestion_control  </p>
+</blockquote>
+<p>如果这两个输出都有“bbr”，则你的内核已经开启了bbr，执行<code>lsmod | grep bbr</code>看到有“tcp_bbr”模块即说明 bbr 已启动。</p>
+<p>至此，所有的配置已完毕。</p>
+<h1 id="第六步：客户端测试"><a href="#第六步：客户端测试" class="headerlink" title="第六步：客户端测试"></a>第六步：客户端测试</h1><p>各类客户端下载地址：<a href="https://shadowsocks.org/en/download/clients.html" target="_blank" rel="noopener">https://shadowsocks.org/en/download/clients.html</a></p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%A7%91%E5%AD%A6%E4%B8%8A%E7%BD%91/"># 科学上网</a>
+                    
+                        <a href="/tags/shadowsocks/"># shadowsocks</a>
+                    
+                        <a href="/tags/bandwagonhost/"># bandwagonhost</a>
+                    
+                        <a href="/tags/%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/"># 操作记录</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/09/17/Debian%E4%B8%8B%E5%AE%89%E8%A3%85JDK+Eclipse%E5%92%8CGnome%E5%9B%BE%E6%A0%87%E7%9A%84%E9%85%8D%E7%BD%AE/">Debian下安装JDK+Eclipse和Gnome图标的配置</a>
+            
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Angel Hair | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
