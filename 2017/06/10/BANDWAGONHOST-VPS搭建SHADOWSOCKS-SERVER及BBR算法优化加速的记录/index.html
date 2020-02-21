@@ -199,15 +199,15 @@
 <li><a href="https://blog.csdn.net/allfun/article/details/53350214" target="_blank" rel="noopener">https://blog.csdn.net/allfun/article/details/53350214</a></li>
 </ul>
 <h1 id="第三步：简单配置"><a href="#第三步：简单配置" class="headerlink" title="第三步：简单配置"></a>第三步：简单配置</h1><p>在买好主机后（这里我买的是KVM架构，数据中心选的是洛杉矶QNET，因为采用了亚洲优化路线），登录到KiwiVM管理面板，准备把系统改成Ubuntu（<del>没错，朱军，我喜欢debian系！⊂彡☆))∀`)</del> 因为我最近一直在用Xbuntu，比较熟悉嘛。）</p>
-<p><img src="%5Cimg%5C2018%5C1.PNG" alt="菜单栏"><br><img src="%5Cimg%5C2018%5C2.PNG" alt="管理面板"></p>
+<p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/1.PNG" alt="菜单栏"><br><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/2.PNG" alt="管理面板"></p>
 <p>首先在主管理界面点击“STOP”关机，然后通过左侧“Install new OS”进入系统选择页面，选择你想要改成的系统，并勾选“I agree that…”</p>
-<p><img src="%5Cimg%5C2018%5C3.PNG" alt="系统选择"></p>
+<p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/3.PNG" alt="系统选择"></p>
 <p>成功后会转到提示，并会给出系统自动生成的root密码和SSH端口（同时还会发送相关邮件给你）。</p>
-<p><img src="%5Cimg%5C2018%5C4.PNG" alt="邮件"></p>
+<p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/4.PNG" alt="邮件"></p>
 <p>KiwiVM虽然自带shell网页端，但用起来不怎么方便，为了方便操作，换用Xshell连接服务器。安装好Xshell后，点击左上角“新建”，在弹出的对话框依次填入VPS商在邮件里给出信息（值得一提的是Bandwagonhost指定了SSH端口，请填写正确；如果vps商没有指定，默认的22端口就行了）。</p>
-<p><img src="%5Cimg%5C2018%5C5.PNG" alt="Xshell"><br><img src="%5Cimg%5C2018%5C6.PNG" alt="Xshell"></p>
+<p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/5.PNG" alt="Xshell"><br><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/6.PNG" alt="Xshell"></p>
 <p>当你填好后，进入模拟终端界面了，输入指令<code>apt-get update</code>，我这里遇到了<code>dpkg was interrupted, you must manually run &#39;dpkg --configure -a&#39; to correct the problem.</code>的报错，删掉/var/lib/dpkg/lock以及/var/lib/dpkg/updates/*，再重新update就好了。</p>
-<p><img src="%5Cimg%5C2018%5C7.PNG" alt="Shell"></p>
+<p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/7.PNG" alt="Shell"></p>
 <h1 id="第四步：配置SHADOWSOCKS-SERVER"><a href="#第四步：配置SHADOWSOCKS-SERVER" class="headerlink" title="第四步：配置SHADOWSOCKS SERVER"></a>第四步：配置SHADOWSOCKS SERVER</h1><p>先执行：</p>
 <blockquote>
 <p>apt-get install build-essential</p>

@@ -189,19 +189,19 @@
 <h1 id="VScode下Python环境的简单配置"><a href="#VScode下Python环境的简单配置" class="headerlink" title="VScode下Python环境的简单配置"></a>VScode下Python环境的简单配置</h1><h2 id="简单配置"><a href="#简单配置" class="headerlink" title="简单配置"></a>简单配置</h2><p>其实主要还是安装插件啦<em>(:зゝ∠)</em></p>
 <p>首先把下面的几个插件装好(第一个是必须的，其他两个是我推荐的(=ﾟωﾟ)=)：</p>
 <p>1、Python</p>
-<p><img src="%5Cimg%5C2018%5C8.PNG" alt="Python"></p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/8.PNG" alt="Python"></p>
 <p>2、AREPL for python</p>
-<p><img src="%5Cimg%5C2018%5C9.PNG" alt="AREPL for python"></p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/9.PNG" alt="AREPL for python"></p>
 <p>3、Python Extension Pack</p>
-<p><img src="%5Cimg%5C2018%5C10.PNG" alt="Python Extension Pack"></p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/10.PNG" alt="Python Extension Pack"></p>
 <p>前两个还好，一般来讲直接就可以装上，但最后一个Python Extension Pack因为微软引入了刚发布的发布 Python 语言服务器(<a href="https://www.oschina.net/news/98235/introducing-the-python-language-server" target="_blank" rel="noopener">Python Language Server</a>)，可能会报错，所以我们需要在用户设置里添加以下代码：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"python.jediEnabled": false,  //指示是使用Jedi作为IntelliSense引擎（true）还是Microsoft Python语言服务器（false）</span><br></pre></td></tr></table></figure>
 
 <p>如果需要单独安装Python Language Server，直接<code>pip install python-language-server</code>就行了。</p>
 <h2 id="额外的配置"><a href="#额外的配置" class="headerlink" title="额外的配置"></a>额外的配置</h2><p>另外如果需要更加个性化的配置，”settings.json”文件里的”Python Configuration”项里列出了所有的自定义项及其简单介绍，可以按需把其中的配置项移到用户设置里修改(这样可以在不改变全局配置的情况下覆盖原有设置)，更加详细的说明可以参考官方的文档:<a href="https://code.visualstudio.com/docs/python/editing" target="_blank" rel="noopener">https://code.visualstudio.com/docs/python/editing</a></p>
-<p><img src="%5Cimg%5C2018%5C11.PNG" alt="Python Configuration"></p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/11.PNG" alt="Python Configuration"></p>
 <h1 id="虚拟环境的设置"><a href="#虚拟环境的设置" class="headerlink" title="虚拟环境的设置"></a>虚拟环境的设置</h1><p>首先，进入vscode设置里面，在搜索栏搜索”python.venv”，在出现的代码里选中”python.venvPath”和”python.venvFolders”这两个设置项，并拖到用户设置里进行配置。</p>
-<p><img src="%5Cimg%5C2018%5C12.PNG" alt="python venv"></p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/12.PNG" alt="python venv"></p>
 <p>这两个设置项的意义如下：</p>
 <ul>
 <li>“python.venvPath”：放置python虚拟环境的根目录</li>
@@ -221,7 +221,7 @@
 <p>2、virtualenv</p>
 <p>virtualenv可以参考这篇文章：<a href="https://www.cnblogs.com/yixuetang/p/8359856.html" target="_blank" rel="noopener">https://www.cnblogs.com/yixuetang/p/8359856.html</a> 这里就不再详细描写了。</p>
 <p>搭建好了以后就可以重启vscode测试了。</p>
-<p>比如需要在项目中切换到虚拟环境，只需要点击左下角的图标：<br><img src="%5Cimg%5C2018%5C13.PNG" alt="left"><br>然后再弹出的上方窗口选择要切换的虚拟环境：<br><img src="%5Cimg%5C2018%5C14.PNG" alt="up"><br>如果切换成功的话，这时左下角的图标就已经改变了：<br><img src="%5Cimg%5C2018%5C15.PNG" alt="left-change"></p>
+<p>比如需要在项目中切换到虚拟环境，只需要点击左下角的图标：<br><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/13.PNG" alt="left"><br>然后再弹出的上方窗口选择要切换的虚拟环境：<br><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/14.PNG" alt="up"><br>如果切换成功的话，这时左下角的图标就已经改变了：<br><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/15.PNG" alt="left-change"></p>
 <p>如果没有图标也可以使用命命令行’ctrl +p’然后输入<code>python:select interpreter</code></p>
 <p>至此，所有的配置已完毕。</p>
 
@@ -236,9 +236,9 @@
                     
                         <a href="/tags/%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/"># 操作记录</a>
                     
-                        <a href="/tags/Visual-Studio-Code/"># Visual Studio Code</a>
-                    
                         <a href="/tags/Python/"># Python</a>
+                    
+                        <a href="/tags/Visual-Studio-Code/"># Visual Studio Code</a>
                     
                         <a href="/tags/%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/"># 虚拟环境</a>
                     
