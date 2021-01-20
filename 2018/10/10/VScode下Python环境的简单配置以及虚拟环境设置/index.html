@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Angel Hair">
+
+
+    <meta name="subtitle" content="绿水青山在 留得个柴烧">
+
+
+    <meta name="description" content="_(:зゝ∠)_">
+
+
+
+<title>VScode下Python环境的简单配置以及虚拟环境设置 | Cat Room</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cat Room</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cat Room</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">VScode下Python环境的简单配置以及虚拟环境设置</h1>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>因为项目组的需要要学python了，虽然老师强烈推荐pycharm，但是现在电脑上已经有许多IDE了，真的不想装再多了<em>(:зゝ∠)</em> 我怕装多了电脑环境出问题，于是就想着还是用vscode吧。虽然后来要求要搭虚拟环境，又吹了一波pycharm，但是我回头一想，vscode好像也可以来着…就立马回去试了下，还真就成了(=ﾟωﾟ)= 感觉这波操作可以有(<del>我可能会忘记(´∀((☆ミつ</del>)，于是就想写下来了。</p>
+<p>方便记录罢了，如有纰漏见谅。</p>
+<p><del>顺便说下vscode今天更新了下，我TM吹爆(´∀((☆ミつ</del></p>
+<h1 id="VScode下Python环境的简单配置"><a href="#VScode下Python环境的简单配置" class="headerlink" title="VScode下Python环境的简单配置"></a>VScode下Python环境的简单配置</h1><h2 id="简单配置"><a href="#简单配置" class="headerlink" title="简单配置"></a>简单配置</h2><p>其实主要还是安装插件啦<em>(:зゝ∠)</em></p>
+<p>首先把下面的几个插件装好(第一个是必须的，其他两个是我推荐的(=ﾟωﾟ)=)：</p>
+<p>1、Python</p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/8.PNG" alt="Python"></p>
+<p>2、AREPL for python</p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/9.PNG" alt="AREPL for python"></p>
+<p>3、Python Extension Pack</p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/10.PNG" alt="Python Extension Pack"></p>
+<p>前两个还好，一般来讲直接就可以装上，但最后一个Python Extension Pack因为微软引入了刚发布的发布 Python 语言服务器(<a href="https://www.oschina.net/news/98235/introducing-the-python-language-server" target="_blank" rel="noopener">Python Language Server</a>)，可能会报错，所以我们需要在用户设置里添加以下代码：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">"python.jediEnabled": false,  //指示是使用Jedi作为IntelliSense引擎（true）还是Microsoft Python语言服务器（false）</span><br></pre></td></tr></table></figure>
+
+<p>如果需要单独安装Python Language Server，直接<code>pip install python-language-server</code>就行了。</p>
+<h2 id="额外的配置"><a href="#额外的配置" class="headerlink" title="额外的配置"></a>额外的配置</h2><p>另外如果需要更加个性化的配置，”settings.json”文件里的”Python Configuration”项里列出了所有的自定义项及其简单介绍，可以按需把其中的配置项移到用户设置里修改(这样可以在不改变全局配置的情况下覆盖原有设置)，更加详细的说明可以参考官方的文档:<a href="https://code.visualstudio.com/docs/python/editing" target="_blank" rel="noopener">https://code.visualstudio.com/docs/python/editing</a></p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/11.PNG" alt="Python Configuration"></p>
+<h1 id="虚拟环境的设置"><a href="#虚拟环境的设置" class="headerlink" title="虚拟环境的设置"></a>虚拟环境的设置</h1><p>首先，进入vscode设置里面，在搜索栏搜索”python.venv”，在出现的代码里选中”python.venvPath”和”python.venvFolders”这两个设置项，并拖到用户设置里进行配置。</p>
+<p><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/12.PNG" alt="python venv"></p>
+<p>这两个设置项的意义如下：</p>
+<ul>
+<li>“python.venvPath”：放置python虚拟环境的根目录</li>
+<li>“python.venvFolders”：根目录下的虚拟环境的文件夹名</li>
+</ul>
+<p>例如我需要在”D:\workpace\python\virtual_environment”目录下配置一个名为”test”虚拟环境的文件夹可以参考下面的配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="comment">//以下是python虚拟环境的设置</span></span><br><span class="line">    <span class="attr">"python.venvPath"</span>: <span class="string">"D:\\workpace\\python\\virtual_environment"</span>, <span class="comment">//这里是windows下的目录设置，linux用户按照常规设置。</span></span><br><span class="line">    <span class="attr">"python.venvFolders"</span>: [</span><br><span class="line">        <span class="string">"test"</span>,</span><br><span class="line">    ],</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来我们需要到根目录下去搭建一个虚拟环境，python3及其以上版本可以用venv，python3以下的可以用virtualenv。</p>
+<p>接上一个例子：</p>
+<p>1、venv(python3自带)</p>
+<p>执行以下命令：</p>
+<blockquote>
+<p>cd /d D:\workpace\python\virtual_environment\test<br>python -m venv .</p>
+</blockquote>
+<p>Linux下的命令和上面windows的差不多，读者可以自行判别。</p>
+<p>2、virtualenv</p>
+<p>virtualenv可以参考这篇文章：<a href="https://www.cnblogs.com/yixuetang/p/8359856.html" target="_blank" rel="noopener">https://www.cnblogs.com/yixuetang/p/8359856.html</a> 这里就不再详细描写了。</p>
+<p>搭建好了以后就可以重启vscode测试了。</p>
+<p>比如需要在项目中切换到虚拟环境，只需要点击左下角的图标：<br><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/13.PNG" alt="left"><br>然后再弹出的上方窗口选择要切换的虚拟环境：<br><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/14.PNG" alt="up"><br>如果切换成功的话，这时左下角的图标就已经改变了：<br><img src="/2018/10/10/VScode%E4%B8%8BPython%E7%8E%AF%E5%A2%83%E7%9A%84%E7%AE%80%E5%8D%95%E9%85%8D%E7%BD%AE%E4%BB%A5%E5%8F%8A%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83%E8%AE%BE%E7%BD%AE/15.PNG" alt="left-change"></p>
+<p>如果没有图标也可以使用命命令行’ctrl +p’然后输入<code>python:select interpreter</code></p>
+<p>至此，所有的配置已完毕。</p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%93%8D%E4%BD%9C%E8%AE%B0%E5%BD%95/"># 操作记录</a>
+                    
+                        <a href="/tags/Visual-Studio-Code/"># Visual Studio Code</a>
+                    
+                        <a href="/tags/Python/"># Python</a>
+                    
+                        <a href="/tags/%E8%99%9A%E6%8B%9F%E7%8E%AF%E5%A2%83/"># 虚拟环境</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2018/12/18/%E4%B8%80%E4%BA%9BPandas-DataFrame%E4%B8%8B%E6%95%B0%E6%8D%AE%E6%93%8D%E4%BD%9C%E7%9A%84%E6%95%B4%E7%90%86/">一些Pandas DataFrame下数据操作的整理</a>
+            
+            
+            <a class="next" rel="next" href="/2018/09/17/Debian%E4%B8%8B%E5%AE%89%E8%A3%85JDK+Eclipse%E5%92%8CGnome%E5%9B%BE%E6%A0%87%E7%9A%84%E9%85%8D%E7%BD%AE/">Debian下安装JDK+Eclipse和Gnome图标的配置</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Angel Hair | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
