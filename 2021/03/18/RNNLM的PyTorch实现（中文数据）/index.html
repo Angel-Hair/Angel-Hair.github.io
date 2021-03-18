@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Angel Hair">
+
+
+    <meta name="subtitle" content="绿水青山在 留得个柴烧">
+
+
+    <meta name="description" content="_(:зゝ∠)_">
+
+
+
+<title>RNNLM的PyTorch实现（中文数据） | Cat Room</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cat Room</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cat Room</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">RNNLM的PyTorch实现（中文数据）</h1>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li><a href="https://www.bilibili.com/video/BV1zf4y1y7g6?p=6" target="_blank" rel="noopener">【深度之眼】NLP-baseline-word2vec2-1对比模型</a></li>
+<li><a href="https://wmathor.com/index.php/archives/1442/" target="_blank" rel="noopener">NNLM 的 PyTorch 实现</a></li>
+<li><a href="https://blog.csdn.net/tjuyanming/article/details/78974713" target="_blank" rel="noopener">Pytorch 实现RNN语言模型</a></li>
+</ul>
+<p>感谢以上工作者对我学习的帮助。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>因为是随便写的，关于本模型的详细介绍这里不再赘述，简单来说其实就是 RNN + NNLM ，相关的学习可以参考上面的内容，其中深度之眼的视频是我用来学习NNLM原理的，下面的文章用来学习NNLM的实现和RNN的对接，不过这里不建议照着RNN那篇文章复现，原文的PyTorch版本较老且模型累赘，但思想值得借鉴。<br><em>另外本文基于中文数据，而上面的参考都是英文数据，在对照的时候需要注意</em></p>
+<h2 id="模型-amp-参数"><a href="#模型-amp-参数" class="headerlink" title="模型&amp;参数"></a>模型&amp;参数</h2><p><img src="/2021/03/18/RNNLM%E7%9A%84PyTorch%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%AD%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%89/RNNLM.png" alt="RNNLM模型架构"><br>本文模型架构如上图，现在的任务是输入 $w_{t-n+1},…,w_{t-1}$ 这前 n-1 个单词，然后预测出下一个单词 $w_t$</p>
+<p>数学符号说明：</p>
+<ul>
+<li>$C (i)$：单词 $w$ 对应的词向量，其中 $i$ 为词 $w$ 在整个词汇表中的索引</li>
+<li>$C$：词向量，大小为 $|V|\times m$ 的矩阵</li>
+<li>$|V|$：词汇表的大小，即预料库中去重后的单词个数</li>
+<li>$m$：词向量的维度，一般是 50 到 200</li>
+<li>$H$：隐藏层的 weight</li>
+<li>$d$：隐藏层的 bias</li>
+<li>$U$：输出层的 weight</li>
+<li>$b$：输出层的 bias</li>
+<li>$W$：输入层到输出层的 weight</li>
+<li>$h$：隐藏层神经元个数</li>
+</ul>
+<h2 id="PyTorch实现"><a href="#PyTorch实现" class="headerlink" title="PyTorch实现"></a>PyTorch实现</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># utf-8</span></span><br><span class="line"><span class="comment"># pytorch vrsion = 1.8.0</span></span><br><span class="line"><span class="comment"># # code by Tae Hwan Jung @graykode, modify by Angel Hair</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.optim <span class="keyword">as</span> optim</span><br><span class="line"><span class="keyword">import</span> torch.utils.data <span class="keyword">as</span> Data</span><br><span class="line"><span class="comment"># print(torch.__version__)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> jieba</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">dtype = torch.FloatTensor</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 文本数据处理</span></span><br><span class="line">data = [</span><br><span class="line">    <span class="string">"我喜欢咖啡"</span>,</span><br><span class="line">    <span class="string">"我爱咖啡因"</span>,</span><br><span class="line">    <span class="string">"我讨厌奶茶"</span>,</span><br><span class="line">    <span class="string">"我恨脂肪酸"</span>,</span><br><span class="line">    <span class="string">"我经常喝水"</span></span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sentences = [jieba.lcut(i) <span class="keyword">for</span> i <span class="keyword">in</span> data] <span class="comment"># [['我', '喜欢', '咖啡'],...,['我', '经常', '喝水']]</span></span><br><span class="line">word_list = [b <span class="keyword">for</span> i <span class="keyword">in</span> sentences <span class="keyword">for</span> b <span class="keyword">in</span> i] <span class="comment"># ['我','喜欢',...,'喝水']</span></span><br><span class="line">word_list = list(set(word_list)) <span class="comment"># ['脂肪酸', '咖啡因', '喜欢', '讨厌', '我', '经常', '奶茶', '咖啡', '爱', '喝水', '恨']</span></span><br><span class="line"></span><br><span class="line">word_dict = &#123;w: i <span class="keyword">for</span> i, w <span class="keyword">in</span> enumerate(word_list)&#125;</span><br><span class="line">num_dict = &#123;i: w <span class="keyword">for</span> i, w <span class="keyword">in</span> enumerate(word_list)&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 参数</span></span><br><span class="line">n_class = len(word_dict) <span class="comment"># number of Vocabulary, just like |V|, in this task n_class=7</span></span><br><span class="line">n_step = len([<span class="string">" "</span>.join(jieba.lcut(i)) <span class="keyword">for</span> i <span class="keyword">in</span> data][<span class="number">0</span>].split()) - <span class="number">1</span> <span class="comment"># n-1 in paper, look back n_step words and predict next word. In this task n_step=2</span></span><br><span class="line">n_hidden = <span class="number">2</span> <span class="comment"># h in paper</span></span><br><span class="line">num_layers = <span class="number">1</span> <span class="comment"># rnn num_layers</span></span><br><span class="line">m = <span class="number">2</span> <span class="comment"># m in paper, word embedding dim</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建迭代器</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_batch</span><span class="params">(sentences)</span>:</span></span><br><span class="line">    input_batch = []</span><br><span class="line">    target_batch = []</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> sentences:</span><br><span class="line">        input = [word_dict[n] <span class="keyword">for</span> n <span class="keyword">in</span> word[:<span class="number">-1</span>]]</span><br><span class="line">        target = word_dict[word[<span class="number">-1</span>]]</span><br><span class="line">        </span><br><span class="line">        input_batch.append(input)</span><br><span class="line">        target_batch.append(target)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">return</span> input_batch, target_batch</span><br><span class="line"></span><br><span class="line">input_batch, target_batch = make_batch(sentences)</span><br><span class="line">input_batch = torch.LongTensor(input_batch)</span><br><span class="line">target_batch = torch.LongTensor(target_batch)</span><br><span class="line"></span><br><span class="line">data_set = Data.TensorDataset(input_batch, target_batch)</span><br><span class="line">loader = Data.DataLoader(</span><br><span class="line">    dataset = data_set,</span><br><span class="line">    batch_size = <span class="number">16</span>,</span><br><span class="line">    shuffle=<span class="literal">True</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 模型</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">RNNLM</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        super(RNNLM, self).__init__()</span><br><span class="line">        self.rnn = nn.RNN(m, n_hidden, num_layers, nonlinearity=<span class="string">'relu'</span>)</span><br><span class="line">        self.C = nn.Embedding(n_class, m) <span class="comment"># 生成word embedding</span></span><br><span class="line">        self.H = nn.Parameter(torch.randn(n_step*m, n_hidden).type(dtype))</span><br><span class="line">        self.W = nn.Parameter(torch.randn(n_step*m, n_class).type(dtype))</span><br><span class="line">        self.d = nn.Parameter(torch.randn(n_hidden).type(dtype))</span><br><span class="line">        self.U = nn.Parameter(torch.randn(n_hidden, n_class).type(dtype))</span><br><span class="line">        self.b = nn.Parameter(torch.randn(n_class).type(dtype))</span><br><span class="line">        </span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, X, hidden)</span>:</span></span><br><span class="line"><span class="comment">#         print(f"X: &#123;X&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"X shape: &#123;X.shape&#125;")</span></span><br><span class="line">        X = self.C(X) <span class="comment"># [batch_size, n_step] =&gt; [batch_size, n_step, m]</span></span><br><span class="line"><span class="comment">#         print(f"X: &#123;X&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"X shape: &#123;X.shape&#125;")</span></span><br><span class="line">        X, h_n = self.rnn(X)</span><br><span class="line">        X = X.view(<span class="number">-1</span>, n_step * m) <span class="comment"># [batch_size, n_step * m]</span></span><br><span class="line"><span class="comment">#         print(f"X: &#123;X&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"X shape: &#123;X.shape&#125;")</span></span><br><span class="line">        hidden_out = torch.tanh(self.d + torch.mm(X, self.H)) <span class="comment"># [batch_size, n_hidden]</span></span><br><span class="line"><span class="comment">#         print(f"hidden_out: &#123;hidden_out&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"hidden_out shape: &#123;hidden_out.shape&#125;")</span></span><br><span class="line">        output = self.b + torch.mm(X, self.W) + torch.mm(hidden_out, self.U) <span class="comment"># [batch_size, n_class]</span></span><br><span class="line"><span class="comment">#         print(f"output: &#123;output&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"output shape: &#123;output.shape&#125;")</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> output, h_n</span><br><span class="line">    </span><br><span class="line">model = RNNLM()</span><br><span class="line">criterion = nn.CrossEntropyLoss()</span><br><span class="line">optimizer = optim.Adam(model.parameters(), lr=<span class="number">1e-3</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练</span></span><br><span class="line">input_hidden = torch.autograd.Variable(torch.randn(m, n_hidden))</span><br><span class="line"><span class="keyword">for</span> epoch <span class="keyword">in</span> range(<span class="number">10000</span>):</span><br><span class="line">    <span class="keyword">for</span> batch_x, batch_y <span class="keyword">in</span> loader:</span><br><span class="line">        output, input_hidden = model(batch_x, input_hidden)</span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        loss = criterion(output, batch_y)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span>(epoch + <span class="number">1</span>)%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">'Epoch:'</span>, <span class="string">'%04d'</span> % (epoch + <span class="number">1</span>), <span class="string">'cost ='</span>, <span class="string">f'<span class="subst">&#123;loss:<span class="number">.6</span>f&#125;</span>'</span>)</span><br><span class="line">        </span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 预测</span></span><br><span class="line"></span><br><span class="line">predict, _ = model(input_batch, input_hidden)</span><br><span class="line">predict = predict.data.max(<span class="number">1</span>, keepdim=<span class="literal">True</span>)[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试</span></span><br><span class="line"></span><br><span class="line">print([word[:n_step] <span class="keyword">for</span> word <span class="keyword">in</span> sentences], <span class="string">'-&gt;'</span>, [num_dict[n.item()] <span class="keyword">for</span> n <span class="keyword">in</span> predict.squeeze()])</span><br></pre></td></tr></table></figure>
+
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>关于最近的一些事情，本来已经打算转行了……去年和室友一起出去创业（做游戏），结果失败后灰头土脸地被导师叫回来推荐了一个面试，虽然最后还是拒了，但是非常感谢导师没有放弃我QAQ，现在的打算是去找一个nlp方向的研发岗位，虽然对我这样双非本科出身又没有顶会的人来说不太现实，至少希望最后能找个沾点边的吧( ´_ゝ` )</p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/"># 神经网络</a>
+                    
+                        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"># 深度学习</a>
+                    
+                        <a href="/tags/PyTorch/"># PyTorch</a>
+                    
+                        <a href="/tags/RNNLM/"># RNNLM</a>
+                    
+                        <a href="/tags/NNLM/"># NNLM</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2021/01/21/%E5%85%B3%E4%BA%8E%E5%A6%82%E4%BD%95%E5%BF%AB%E9%80%9F%E5%88%86%E6%9E%90%E8%88%86%E8%AE%BA%E7%83%AD%E7%82%B9%E7%9A%84%E5%BB%BA%E8%AE%AE/">关于如何快速分析舆论热点的建议</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Angel Hair | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
