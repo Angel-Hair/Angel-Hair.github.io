@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="Angel Hair">
+
+
+    <meta name="subtitle" content="绿水青山在 留得个柴烧">
+
+
+    <meta name="description" content="_(:зゝ∠)_">
+
+
+
+<title>Word2Vec的PyTorch实现（中文数据）（参考版） | Cat Room</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+            <!-- MathJax配置，可通过单美元符号书写行内公式等 -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+    "HTML-CSS": {
+        preferredFont: "TeX",
+        availableFonts: ["STIX","TeX"],
+        linebreaks: { automatic:true },
+        EqnChunk: (MathJax.Hub.Browser.isMobile ? 10 : 50)
+    },
+    tex2jax: {
+        inlineMath: [ ["$", "$"], ["\\(","\\)"] ],
+        processEscapes: true,
+        ignoreClass: "tex2jax_ignore|dno",
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+        equationNumbers: { autoNumber: "AMS" },
+        noUndefined: { attributes: { mathcolor: "red", mathbackground: "#FFEEEE", mathsize: "90%" } },
+        Macros: { href: "{}" }
+    },
+    messageStyle: "none"
+    });
+</script>
+<!-- 给MathJax元素添加has-jax class -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for(i=0; i < all.length; i += 1) {
+            all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+    });
+</script>
+<!-- 通过连接CDN加载MathJax的js代码 -->
+<script type="text/javascript" async
+        src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+        
+    
+
+
+<meta name="generator" content="Hexo 4.2.0"></head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">Cat Room</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">Cat Room</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Word2Vec的PyTorch实现（中文数据）（参考版）</h1>
+            
+        </header>
+
+        <div class="post-content">
+            <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
+<li>论文<ul>
+<li><a href="https://arxiv.org/abs/1301.3781v3" target="_blank" rel="noopener">Efficient Estimation of Word Representations in Vector Space</a></li>
+</ul>
+</li>
+<li>原理<ul>
+<li><a href="https://www.bilibili.com/video/BV1zf4y1y7g6?p=8" target="_blank" rel="noopener">【深度之眼】NLP-baseline-word2vec2-3word2vec关键技术</a></li>
+</ul>
+</li>
+<li>实现<ul>
+<li><a href="https://wmathor.com/index.php/archives/1435/" target="_blank" rel="noopener">PyTorch 实现 Word2Vec</a></li>
+</ul>
+</li>
+<li>相关知识<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/85832270" target="_blank" rel="noopener">机器学习基础：相似度和距离度量究竟是什么</a></li>
+<li><a href="https://www.zhihu.com/question/37489735/answer/73026156" target="_blank" rel="noopener">word2vec算出的词向量怎么衡量好坏？ - jiangfeng的回答 - 知乎</a>  </li>
+<li><a href="https://blog.csdn.net/qq_33293040/article/details/108046436" target="_blank" rel="noopener">送丹入炉：学会使用Dataloader方法包装我们的数据</a></li>
+</ul>
+</li>
+</ul>
+<p><strong>感谢以上工作者对我学习的帮助。</strong></p>
+<blockquote>
+<p>If I have seen further, it is by standing on the shoulders of giants.</p>
+</blockquote>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>关于我最近用于记录自己测试模型的文章，一概不会对其原理进行介绍，并非不想，实在是本人所学甚浅，怕自己误人子弟的原因。我自己在学习的时候也会去网上进行查找资料，发现经常出现专业名词误译、用词不当和概念误解等情况。</p>
+<p>我会在系统学习完NLP领域的知识后，再单独写一个解说版，并大概率会附上一个解说视频（坑）。</p>
+<h2 id="简易中文数据集生成"><a href="#简易中文数据集生成" class="headerlink" title="简易中文数据集生成"></a>简易中文数据集生成</h2><h3 id="所需数据格式"><a href="#所需数据格式" class="headerlink" title="所需数据格式"></a>所需数据格式</h3><p>我们目标的格式是用空格分割词的长文本，英文数据的处理非常简单，毕竟本来就是用空格来分割词的，如下图：</p>
+<p><img src="/2021/05/20/Word2Vec%E7%9A%84PyTorch%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%AD%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%89%EF%BC%88%E5%8F%82%E8%80%83%E7%89%88%EF%BC%89/%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BE%8B1.png" alt="数据实例1"></p>
+<p>而中文需要人工去分词，我找了很久都没有所需格式的中小型中文数据集，所以需要自己用分词库简易生成一个。</p>
+<h3 id="数据源"><a href="#数据源" class="headerlink" title="数据源"></a>数据源</h3><p>下面将使用从网上下载的《剑来》小说的TXT文本来进行处理，读者可用其他的TXT文本进行处理，但不能保证数据的清洁度足够，可能需要读者自行处理。</p>
+<p>由于涉及到版权问题，这里将不会提供完整的数据，请读者自行下载，这里是下载地址：<a href="http://www.xshuyaya.cc/book/18009/#download" target="_blank" rel="noopener">《剑来》</a></p>
+<h3 id="数据生成"><a href="#数据生成" class="headerlink" title="数据生成"></a>数据生成</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># utf-8</span></span><br><span class="line"><span class="comment"># thulac vrsion = 0.2.1</span></span><br><span class="line"><span class="comment"># pytorch vrsion = 1.8.0</span></span><br><span class="line"><span class="comment"># pyecharts vrsion = 1.9.0</span></span><br><span class="line"><span class="comment"># code by Angel Hair</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">import</span> torch.utils.data <span class="keyword">as</span> tud</span><br><span class="line"><span class="comment"># print(torch.__version__)</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> Counter</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> pyecharts.options <span class="keyword">as</span> opts</span><br><span class="line"><span class="keyword">from</span> pyecharts.charts <span class="keyword">import</span> Scatter</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> sklearn.metrics.pairwise <span class="keyword">import</span> cosine_similarity</span><br><span class="line"><span class="keyword">from</span> sklearn.manifold <span class="keyword">import</span> TSNE</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> scipy</span><br><span class="line"><span class="keyword">import</span> thulac</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 读入文本</span></span><br><span class="line">lines = []</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"剑来.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    lines = f.readlines()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 清理数据</span></span><br><span class="line">data = []</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">    line = line.strip()</span><br><span class="line">    <span class="keyword">if</span> line != <span class="string">""</span>:</span><br><span class="line">        data.append(line)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分词</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"p_input.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">"\n"</span>.join(data))</span><br><span class="line"></span><br><span class="line">thu1 = thulac.thulac(seg_only=<span class="literal">True</span>)</span><br><span class="line">thu1.cut_f(<span class="string">"p_input.txt"</span>, <span class="string">"p_output.txt"</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 标点符号集</span></span><br><span class="line">stopwords = <span class="string">'''~!@#$%^&amp;*()_+`1234567890-=&#123;&#125;[]:：";'&lt;&gt;,.?/|\、·！（）￥“”‘’《》，。？/—-【】….'''</span></span><br><span class="line">stopwords_set = set([i <span class="keyword">for</span> i <span class="keyword">in</span> stopwords])</span><br><span class="line">stopwords_set.add(<span class="string">"br"</span>) <span class="comment"># 异常词也加入此集，方便去除</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"p_output.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    lines = f.readlines()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据清理</span></span><br><span class="line">data = []</span><br><span class="line"><span class="keyword">for</span> line <span class="keyword">in</span> lines:</span><br><span class="line">    <span class="keyword">for</span> s <span class="keyword">in</span> stopwords_set:</span><br><span class="line">        line = line.strip().replace(s, <span class="string">""</span>)</span><br><span class="line">    line = line.replace(<span class="string">"   "</span>,<span class="string">" "</span>).replace(<span class="string">"  "</span>,<span class="string">" "</span>)</span><br><span class="line">    <span class="keyword">if</span> line != <span class="string">""</span> <span class="keyword">and</span> line != <span class="string">" "</span>:</span><br><span class="line">        data.append(line)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存数据</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"all.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(<span class="string">" "</span>.join(data))</span><br></pre></td></tr></table></figure>
+
+<p>处理较慢，建议去听一两首歌(‾◡◝) —— <a href="http://music.163.com/song?id=1447294011&userid=134956218" target="_blank" rel="noopener">Evelonda - SNKS</a></p>
+<p>生成的数据如下图：</p>
+<p><img src="/2021/05/20/Word2Vec%E7%9A%84PyTorch%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%AD%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%89%EF%BC%88%E5%8F%82%E8%80%83%E7%89%88%EF%BC%89/%E6%95%B0%E6%8D%AE%E5%AE%9E%E4%BE%8B2.png" alt="数据实例2"></p>
+<h3 id="数据集生成"><a href="#数据集生成" class="headerlink" title="数据集生成"></a>数据集生成</h3><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 分割数据为训练集、测试集和验证集，并保存</span></span><br><span class="line">all_text = <span class="string">""</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"all.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    all_text = f.readline()</span><br><span class="line">    </span><br><span class="line">all_len = len(all_text)</span><br><span class="line">train_text = all_text[:int(all_len*<span class="number">0.9</span>)]</span><br><span class="line">dev_text = all_text[int(all_len*<span class="number">0.9</span>):int(all_len*<span class="number">0.95</span>)]</span><br><span class="line">test_text = all_text[int(all_len*<span class="number">0.95</span>):]</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"dev.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(dev_text)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"test.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(test_text)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"train.txt"</span>, <span class="string">"w"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(train_text)</span><br></pre></td></tr></table></figure>
+
+<h2 id="参数设置"><a href="#参数设置" class="headerlink" title="参数设置"></a>参数设置</h2><p>优先设置参数可以方便我们之后Dataloader的创建</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置所有参数</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对每个库设置随机种子</span></span><br><span class="line">random.seed(<span class="number">1</span>)</span><br><span class="line">np.random.seed(<span class="number">1</span>)</span><br><span class="line">torch.manual_seed(<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">C = <span class="number">3</span> <span class="comment"># 窗口大小，注意这里的窗口大小为分别向左边和右边取C个词</span></span><br><span class="line">K = <span class="number">15</span> <span class="comment"># 负采样样本数（噪声词）</span></span><br><span class="line">epochs = <span class="number">2</span></span><br><span class="line">MAX_VOCAB_SIZE = <span class="number">10000</span></span><br><span class="line">EMBEDDING_SIZE = <span class="number">100</span></span><br><span class="line">batch_size = <span class="number">32</span></span><br><span class="line">lr = <span class="number">0.2</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 读取并分割</span></span><br><span class="line">text = <span class="string">""</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">"train.txt"</span>, <span class="string">"r"</span>, encoding=<span class="string">"gbk"</span>) <span class="keyword">as</span> f:</span><br><span class="line">    text = f.read()</span><br><span class="line">    </span><br><span class="line">text = text.lower().split() <span class="comment">#　分割成单词列表</span></span><br><span class="line">vocab_dict = dict(Counter(text).most_common(MAX_VOCAB_SIZE - <span class="number">1</span>)) <span class="comment"># 得到单词字典表，key是单词，value是次数</span></span><br><span class="line">vocab_dict[<span class="string">'&lt;UNK&gt;'</span>] = len(text) - np.sum(list(vocab_dict.values())) <span class="comment"># 把不常用的单词都编码为"&lt;UNK&gt;"</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建词值对</span></span><br><span class="line">word2idx = &#123;word:i <span class="keyword">for</span> i, word <span class="keyword">in</span> enumerate(vocab_dict.keys())&#125;</span><br><span class="line">idx2word = &#123;i:word <span class="keyword">for</span> i, word <span class="keyword">in</span> enumerate(vocab_dict.keys())&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算和处理频率</span></span><br><span class="line">word_counts = np.array(list(vocab_dict.values()), dtype=np.float32)</span><br><span class="line">word_freqs = (word_counts / np.sum(word_counts))** (<span class="number">3.</span>/<span class="number">4.</span>) <span class="comment"># 所有的频率为原来的 0.75 次方， 论文中的推荐方法，由图像分析可推测这样可以一定程度上提高频率低的权重，降低频率高的权重</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/2021/05/20/Word2Vec%E7%9A%84PyTorch%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%AD%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%89%EF%BC%88%E5%8F%82%E8%80%83%E7%89%88%EF%BC%89/%E5%87%BD%E6%95%B0%E5%9B%BE%E5%83%8F1.png" alt="函数图像1"></p>
+<h2 id="构建Dataloader"><a href="#构建Dataloader" class="headerlink" title="构建Dataloader"></a>构建Dataloader</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">WordEmbeddingDataset</span><span class="params">(tud.Dataset)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, text, word2idx, word_freqs)</span>:</span></span><br><span class="line">        <span class="string">''' </span></span><br><span class="line"><span class="string">        :text: a list of words, all text from the training dataset</span></span><br><span class="line"><span class="string">        :word2idx: the dictionary from word to index</span></span><br><span class="line"><span class="string">        :word_freqs: the frequency of each word</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        super(WordEmbeddingDataset, self).__init__()</span><br><span class="line">        <span class="comment"># 注意下面重写的方法</span></span><br><span class="line">        self.text_encoded = [word2idx.get(word, word2idx[<span class="string">'&lt;UNK&gt;'</span>]) <span class="keyword">for</span> word <span class="keyword">in</span> text] <span class="comment"># 把单词数字化表示。如果不在词典中，也表示为unk</span></span><br><span class="line">        self.text_encoded = torch.LongTensor(self.text_encoded) <span class="comment"># nn.Embedding需要传入LongTensor类型</span></span><br><span class="line">        self.word2idx = word2idx</span><br><span class="line">        self.word_freqs = torch.Tensor(word_freqs)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__len__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> len(self.text_encoded) <span class="comment"># 返回所有单词的总数，即item的总数</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__getitem__</span><span class="params">(self, idx)</span>:</span></span><br><span class="line">        <span class="string">''' 这个function用于返回：中心词（center_words），周围词（pos_words），负采样词（neg_words）</span></span><br><span class="line"><span class="string">        :idx: 中心词索引</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line">        center_words = self.text_encoded[idx] <span class="comment"># 取得中心词</span></span><br><span class="line">        pos_indices = list(range(idx - C, idx)) + list(range(idx + <span class="number">1</span>, idx + C + <span class="number">1</span>)) <span class="comment"># 取出所有周围词索引，用于下面的tensor(list)操作</span></span><br><span class="line">        pos_indices = [i % len(self.text_encoded) <span class="keyword">for</span> i <span class="keyword">in</span> pos_indices] <span class="comment"># 为了避免索引越界，所以进行取余处理，如：设总词数为100，则[1]取余为[1]，而[101]取余为[1]</span></span><br><span class="line">        pos_words = self.text_encoded[pos_indices] <span class="comment"># tensor(list)操作，取出所有周围词</span></span><br><span class="line">        neg_words = torch.multinomial(self.word_freqs, K * pos_words.shape[<span class="number">0</span>], <span class="literal">True</span>)</span><br><span class="line">        <span class="comment"># torch.multinomial作用是对self.word_freqs做K * pos_words.shape[0]次取值，输出的是self.word_freqs对应的下标</span></span><br><span class="line">        <span class="comment"># 取样方式采用有放回的采样，并且self.word_freqs数值越大，取样概率越大</span></span><br><span class="line">        <span class="comment"># 实际上从这里就可以看出，这里用的是skip-gram方法，并且采用负采样（Negative Sampling）进行优化</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment"># while 循环是为了保证 neg_words中不能包含周围词</span></span><br><span class="line">        <span class="comment"># Angel Hair：实际上不需要这么处理，因为我们遇到的都是非常大的数据，会导致取到周围词的概率非常非常小，这里之所以这么做是因为本文和参考文所提供的数据太小，导致这个概率变大了，会影响模型</span></span><br><span class="line">        <span class="keyword">while</span> len(set(pos_indices) &amp; set(neg_words.numpy().tolist())) &gt; <span class="number">0</span>:</span><br><span class="line">            neg_words = torch.multinomial(self.word_freqs, K * pos_words.shape[<span class="number">0</span>], <span class="literal">True</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> center_words, pos_words, neg_words</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">dataset = WordEmbeddingDataset(text, word2idx, word_freqs)</span><br><span class="line">dataloader = tud.DataLoader(dataset, batch_size, shuffle=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型构建"><a href="#模型构建" class="headerlink" title="模型构建"></a>模型构建</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EmbeddingModel</span><span class="params">(nn.Module)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, vocab_size, embed_size)</span>:</span></span><br><span class="line">        super(EmbeddingModel, self).__init__()</span><br><span class="line">        </span><br><span class="line">        self.vocab_size = vocab_size</span><br><span class="line">        self.embed_size = embed_size</span><br><span class="line">        </span><br><span class="line">        self.in_embed = nn.Embedding(self.vocab_size, self.embed_size)</span><br><span class="line">        self.out_embed = nn.Embedding(self.vocab_size, self.embed_size)</span><br><span class="line"></span><br><span class="line">        </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">forward</span><span class="params">(self, input_labels, pos_labels, neg_labels)</span>:</span></span><br><span class="line">        <span class="string">'''return: loss, [batch_size]</span></span><br><span class="line"><span class="string">        :input_labels: center words, [batch_size]</span></span><br><span class="line"><span class="string">        :pos_labels: positive words, [batch_size, (C * 2)]</span></span><br><span class="line"><span class="string">        :neg_labels：negative words, [batch_size, (C * 2 * K)]</span></span><br><span class="line"><span class="string">        '''</span></span><br><span class="line"><span class="comment">#         print(f"input_labels: &#123;input_labels&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"input_labels shape: &#123;input_labels.shape&#125;")</span></span><br><span class="line">        input_embedding = self.in_embed(input_labels) <span class="comment"># [batch_size, embed_size]</span></span><br><span class="line"><span class="comment">#         print(f"input_embedding: &#123;input_embedding&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"input_embedding shape: &#123;input_embedding.shape&#125;")</span></span><br><span class="line">        </span><br><span class="line"><span class="comment">#         print(f"pos_labels: &#123;pos_labels&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"pos_labels shape: &#123;pos_labels.shape&#125;")</span></span><br><span class="line">        pos_embedding = self.out_embed(pos_labels)<span class="comment"># [batch_size, (window * 2), embed_size]   </span></span><br><span class="line"><span class="comment">#         print(f"pos_embedding: &#123;pos_embedding&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"pos_embedding shape: &#123;pos_embedding.shape&#125;")</span></span><br><span class="line">        </span><br><span class="line"><span class="comment">#         print(f"neg_labels: &#123;neg_labels&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"neg_labels shape: &#123;neg_labels.shape&#125;")</span></span><br><span class="line">        neg_embedding = self.out_embed(neg_labels) <span class="comment"># [batch_size, (window * 2 * K), embed_size]</span></span><br><span class="line"><span class="comment">#         print(f"neg_embedding: &#123;neg_embedding&#125;")</span></span><br><span class="line"><span class="comment">#         print(f"neg_embedding shape: &#123;neg_embedding.shape&#125;")</span></span><br><span class="line">        </span><br><span class="line">        input_embedding = input_embedding.unsqueeze(<span class="number">2</span>) <span class="comment"># [batch_size, embed_size, 1]</span></span><br><span class="line">        </span><br><span class="line">        pos_dot = torch.bmm(pos_embedding, input_embedding) <span class="comment"># [batch_size, (window * 2), 1]</span></span><br><span class="line">        pos_dot = pos_dot.squeeze(<span class="number">2</span>) <span class="comment"># [batch_size, (window * 2)]</span></span><br><span class="line">        </span><br><span class="line">        neg_dot = torch.bmm(neg_embedding, -input_embedding) <span class="comment"># [batch_size, (window * 2 * K), 1]</span></span><br><span class="line">        <span class="comment"># 注意负号，参考公式可以知负样本的概率越小越好，所以位负号</span></span><br><span class="line">        neg_dot = neg_dot.squeeze(<span class="number">2</span>) <span class="comment"># batch_size, (window * 2 * K)]</span></span><br><span class="line">        </span><br><span class="line">        log_pos = F.logsigmoid(pos_dot).sum(<span class="number">1</span>) <span class="comment"># .sum()结果只为一个数，.sum(1)结果是一维的张量</span></span><br><span class="line">        log_neg = F.logsigmoid(neg_dot).sum(<span class="number">1</span>)</span><br><span class="line">        </span><br><span class="line">        loss = log_pos + log_neg <span class="comment"># 理论上应该除2，实际除不除一样</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> -loss <span class="comment"># 我们希望概率迭代越大越好，加一个负值，变成越小越好，使之可以正确迭代</span></span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">input_embedding</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.in_embed.weight.detach().numpy()</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">model = EmbeddingModel(MAX_VOCAB_SIZE, EMBEDDING_SIZE)</span><br><span class="line">optimizer = torch.optim.Adam(model.parameters(), lr=<span class="number">1e-3</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="模型训练和保存"><a href="#模型训练和保存" class="headerlink" title="模型训练和保存"></a>模型训练和保存</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> e <span class="keyword">in</span> range(<span class="number">1</span>):</span><br><span class="line">    <span class="keyword">for</span> i, (input_labels, pos_labels, neg_labels) <span class="keyword">in</span> enumerate(dataloader):</span><br><span class="line">        input_labels = input_labels.long()</span><br><span class="line">        pos_labels = pos_labels.long()</span><br><span class="line">        neg_labels = neg_labels.long()</span><br><span class="line"></span><br><span class="line">        optimizer.zero_grad()</span><br><span class="line">        loss = model(input_labels, pos_labels, neg_labels).mean() <span class="comment">#.mean()默认不设置dim的时候，返回的是所有元素的平均值</span></span><br><span class="line">        loss.backward()</span><br><span class="line">        optimizer.step()</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> i % <span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            print(<span class="string">'epoch'</span>, e, <span class="string">'iteration'</span>, i, loss.item())</span><br><span class="line"></span><br><span class="line">            </span><br><span class="line">embedding_weights = model.input_embedding()</span><br><span class="line">torch.save(model.state_dict(), <span class="string">"embedding-&#123;&#125;.th"</span>.format(EMBEDDING_SIZE))</span><br></pre></td></tr></table></figure>
+
+<h2 id="简单应用"><a href="#简单应用" class="headerlink" title="简单应用"></a>简单应用</h2><p>在测试完代码后，我刚好到答辩的时间段了，事情变得多起来了，关于怎么应用和模型评估的问题暂时被搁置。下面随便举了两个例子（其中一个来自参考），等我有空再来补全。</p>
+<h3 id="相近词性查找"><a href="#相近词性查找" class="headerlink" title="相近词性查找"></a>相近词性查找</h3><p>以下函数用于找出词性相近的词：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">find_nearest</span><span class="params">(word)</span>:</span></span><br><span class="line">    index = word2idx[word]</span><br><span class="line">    embedding = embedding_weights[index]</span><br><span class="line">    cos_dis = np.array([scipy.spatial.distance.cosine(e, embedding) <span class="keyword">for</span> e <span class="keyword">in</span> embedding_weights])</span><br><span class="line">    print(cos_dis.shape)</span><br><span class="line">    <span class="keyword">return</span> [idx2word[i] <span class="keyword">for</span> i <span class="keyword">in</span> cos_dis.argsort()[:<span class="number">10</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 注意这里必须计算余弦相似度，而不是欧氏距离，所以不应该画散点图来展示词分类</span></span><br></pre></td></tr></table></figure>
+
+<p>如我们输入：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&gt; find_nearest(<span class="string">"陈平安"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>可以得到其他小说中人物的名字，因为它们词性相近。</p>
+<h3 id="降维可视化"><a href="#降维可视化" class="headerlink" title="降维可视化"></a>降维可视化</h3><p>如果想要生成一张展示词性分类的图，可以参考以下的代码，但结果一般不会太理想。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 降维并绘制前300个词的关联散点图</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># TSNE降维</span></span><br><span class="line">tsne = TSNE(n_components=<span class="number">2</span>, learning_rate=<span class="number">100</span>).fit_transform(embedding_weights)</span><br><span class="line"></span><br><span class="line">x_data =[]</span><br><span class="line">y_data =[]</span><br><span class="line">index = <span class="number">300</span> <span class="comment"># 注意我们这里为了防止数据太过密集，只取前300个词来进行绘制</span></span><br><span class="line"><span class="keyword">for</span> i, label <span class="keyword">in</span> enumerate(list(word2idx.keys())[:index]):</span><br><span class="line">    x, y = float(tsne[i][<span class="number">0</span>]), float(tsne[i][<span class="number">1</span>])</span><br><span class="line">    x_data.append(x)</span><br><span class="line">    y_data.append((y, label))</span><br><span class="line"></span><br><span class="line">(</span><br><span class="line">    Scatter(init_opts=opts.InitOpts(width=<span class="string">"16000px"</span>, height=<span class="string">"10000px"</span>))</span><br><span class="line">    .add_xaxis(xaxis_data=x_data)</span><br><span class="line">    .add_yaxis(</span><br><span class="line">        series_name=<span class="string">""</span>,</span><br><span class="line">        y_axis=y_data,</span><br><span class="line">        symbol_size=<span class="number">50</span>,</span><br><span class="line">        label_opts=opts.LabelOpts(</span><br><span class="line">            font_size=<span class="number">50</span>,</span><br><span class="line">            formatter=JsCode(</span><br><span class="line">                <span class="string">"function(params)&#123;return params.value[2];&#125;"</span></span><br><span class="line">            )</span><br><span class="line">        ),</span><br><span class="line">    )</span><br><span class="line">    .set_series_opts()</span><br><span class="line">    .set_global_opts(</span><br><span class="line">        xaxis_opts=opts.AxisOpts(type_=<span class="string">"value"</span>),</span><br><span class="line">        yaxis_opts=opts.AxisOpts(</span><br><span class="line">            type_=<span class="string">"value"</span>,</span><br><span class="line">            axistick_opts=opts.AxisTickOpts(is_show=<span class="literal">True</span>),</span><br><span class="line">        ),</span><br><span class="line">        tooltip_opts=opts.TooltipOpts(is_show=<span class="literal">False</span>),</span><br><span class="line">    )</span><br><span class="line">    .render(<span class="string">"scatter.html"</span>)</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>生成的图像保存在本地文件<code>scatter.html</code>内，原图超大，请适当进行缩放来查看。</p>
+<p>以下为我选取的比较好的部分截图：</p>
+<p><img src="/2021/05/20/Word2Vec%E7%9A%84PyTorch%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%AD%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%89%EF%BC%88%E5%8F%82%E8%80%83%E7%89%88%EF%BC%89/%E7%A4%BA%E4%BE%8B1.png" alt="示例1"></p>
+<p><img src="/2021/05/20/Word2Vec%E7%9A%84PyTorch%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%AD%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%89%EF%BC%88%E5%8F%82%E8%80%83%E7%89%88%EF%BC%89/%E7%A4%BA%E4%BE%8B2.png" alt="示例2"></p>
+<p>由此可以简单看出来词之间的一些相关性，虽然效果比较差，但我实在没空调参和优化了，暂时先这样吧_(:зゝ∠)_</p>
+<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>已经放弃找工作了，因为被导师和辅导员骂去考研了，说实话，总觉得他们高看我了，我平时成绩很差的……</p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"># 深度学习</a>
+                    
+                        <a href="/tags/PyTorch/"># PyTorch</a>
+                    
+                        <a href="/tags/NLP/"># NLP</a>
+                    
+                        <a href="/tags/%E6%A8%A1%E5%9E%8B%E5%AE%9E%E7%8E%B0/"># 模型实现</a>
+                    
+                        <a href="/tags/Word2Vec/"># Word2Vec</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2021/03/18/RNNLM%E7%9A%84PyTorch%E5%AE%9E%E7%8E%B0%EF%BC%88%E4%B8%AD%E6%96%87%E6%95%B0%E6%8D%AE%EF%BC%89%EF%BC%88%E5%8F%82%E8%80%83%E7%89%88%EF%BC%89/">RNNLM的PyTorch实现（中文数据）（参考版）</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© Angel Hair | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
