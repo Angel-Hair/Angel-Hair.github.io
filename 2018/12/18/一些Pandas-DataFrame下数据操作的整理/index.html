@@ -179,6 +179,28 @@
         <header class="post-header">
             <h1 class="post-title">一些Pandas DataFrame下数据操作的整理</h1>
             
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Angel Hair</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 18, 2018&nbsp;&nbsp;19:09:12</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a>
+                            
+                                <a href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/%E4%BB%A3%E7%A0%81%E6%95%B4%E7%90%86/">代码整理</a>
+                            
+                        </span>
+                    
+                </div>
+            
         </header>
 
         <div class="post-content">
@@ -211,6 +233,24 @@
 <h2 id="合并其他数据的多个列"><a href="#合并其他数据的多个列" class="headerlink" title="合并其他数据的多个列"></a>合并其他数据的多个列</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">new_data = df.join(data_pc[[<span class="string">'longitude'</span>, <span class="string">'latitude'</span>]])</span><br></pre></td></tr></table></figure>
         </div>
 
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Angel Hair</span>
+                    </p>
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
         
         <section class="post-tags">
             <div>
@@ -247,6 +287,29 @@
 
     </article>
 </div>
+
+
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '50a78039a642b3e969cf',
+        clientSecret: 'd747252c944bf94910270439687c98575f0b6f4f',
+        repo: 'Gitalk_comments',
+        owner: 'angel-hair',
+        admin: 'angel-hair',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 8,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+    })
+    gitalk.render('gitalk-container')      
+</script>
 
         </div>
         <footer id="footer" class="footer">

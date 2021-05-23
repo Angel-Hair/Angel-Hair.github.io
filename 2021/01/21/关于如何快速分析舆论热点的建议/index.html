@@ -179,6 +179,26 @@
         <header class="post-header">
             <h1 class="post-title">关于如何快速分析舆论热点的建议</h1>
             
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Angel Hair</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">January 21, 2021&nbsp;&nbsp;1:02:00</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E5%B7%A5%E5%85%B7/">工具</a>
+                            
+                        </span>
+                    
+                </div>
+            
         </header>
 
         <div class="post-content">
@@ -209,6 +229,24 @@
 
         </div>
 
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Angel Hair</span>
+                    </p>
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
         
         <section class="post-tags">
             <div>
@@ -245,6 +283,29 @@
 
     </article>
 </div>
+
+
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '50a78039a642b3e969cf',
+        clientSecret: 'd747252c944bf94910270439687c98575f0b6f4f',
+        repo: 'Gitalk_comments',
+        owner: 'angel-hair',
+        admin: 'angel-hair',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 8,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+    })
+    gitalk.render('gitalk-container')      
+</script>
 
         </div>
         <footer id="footer" class="footer">

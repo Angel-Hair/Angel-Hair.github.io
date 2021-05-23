@@ -16,7 +16,7 @@
 
 
 
-<title>BANDWAGONHOST VPS搭建SHADOWSOCKS SERVER及BBR算法优化加速的记录 | Cat Room</title>
+<title>BANDWAGONHOST搭建SHADOWSOCKS及BBR算法优化加速的记录 | Cat Room</title>
 
 
 
@@ -177,15 +177,35 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">BANDWAGONHOST VPS搭建SHADOWSOCKS SERVER及BBR算法优化加速的记录</h1>
+            <h1 class="post-title">BANDWAGONHOST搭建SHADOWSOCKS及BBR算法优化加速的记录</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">Angel Hair</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">June 10, 2017&nbsp;&nbsp;16:23:30</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/%E6%9C%8D%E5%8A%A1%E5%99%A8/">服务器</a>
+                            
+                        </span>
+                    
+                </div>
             
         </header>
 
         <div class="post-content">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这篇文章是我在刚上大学时因为要查找各种资料，不得不搭建ss服务器时的方便记录，写得十分粗糙请见谅。<br><strong>另外，请不要将文章中的知识用于越界法律的研究！</strong></p>
-<h1 id="第一步：买好你的VPS"><a href="#第一步：买好你的VPS" class="headerlink" title="第一步：买好你的VPS"></a>第一步：买好你的VPS</h1><p>参考 <a href="https://zhuanlan.zhihu.com/p/33887156" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/33887156</a> 选择了Bandwagonhost主机商，购买参考：<a href="http://www.cnhawkit.com/328.html。" target="_blank" rel="noopener">http://www.cnhawkit.com/328.html。</a><br>参考 <a href="https://zhuanlan.zhihu.com/p/36121716，决定领取github" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36121716，决定领取github</a> student pack，用digitalocean主机商，尚未找到配置参考。</p>
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这篇文章是我在刚上大学时因为要查找各种资料，不得不搭建ss服务器时的方便记录，写得十分粗糙请见谅。<br><strong>另外，请不要将文章中的知识用于越界法律的研究！</strong></p>
+<h2 id="第一步：买好你的VPS"><a href="#第一步：买好你的VPS" class="headerlink" title="第一步：买好你的VPS"></a>第一步：买好你的VPS</h2><p>参考 <a href="https://zhuanlan.zhihu.com/p/33887156" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/33887156</a> 选择了Bandwagonhost主机商，购买参考：<a href="http://www.cnhawkit.com/328.html。" target="_blank" rel="noopener">http://www.cnhawkit.com/328.html。</a><br>参考 <a href="https://zhuanlan.zhihu.com/p/36121716，决定领取github" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36121716，决定领取github</a> student pack，用digitalocean主机商，尚未找到配置参考。</p>
 <p><del>发现领取github student pack太麻烦，Bandwagonhost刚好在打折，还是用第一种吧（逃）。</del></p>
-<h1 id="第二步：查找ss服务器配置的相关文章"><a href="#第二步：查找ss服务器配置的相关文章" class="headerlink" title="第二步：查找ss服务器配置的相关文章"></a>第二步：查找ss服务器配置的相关文章</h1><p>相关文章列表（部分内容需要翻墙！）：</p>
+<h2 id="第二步：查找ss服务器配置的相关文章"><a href="#第二步：查找ss服务器配置的相关文章" class="headerlink" title="第二步：查找ss服务器配置的相关文章"></a>第二步：查找ss服务器配置的相关文章</h2><p>相关文章列表（部分内容需要翻墙！）：</p>
 <ul>
 <li><a href="https://zhuanlan.zhihu.com/p/31513383" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/31513383</a></li>
 <li><a href="https://zhuanlan.zhihu.com/p/36121716" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/36121716</a></li>
@@ -197,7 +217,7 @@
 <li><a href="https://moshuqi.github.io/2017/07/20/%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BAVPN%E6%9C%8D%E5%8A%A1%E5%99%A8/" target="_blank" rel="noopener">https://moshuqi.github.io/2017/07/20/%E8%87%AA%E5%B7%B1%E6%90%AD%E5%BB%BAVPN%E6%9C%8D%E5%8A%A1%E5%99%A8/</a></li>
 <li><a href="https://blog.csdn.net/allfun/article/details/53350214" target="_blank" rel="noopener">https://blog.csdn.net/allfun/article/details/53350214</a></li>
 </ul>
-<h1 id="第三步：简单配置"><a href="#第三步：简单配置" class="headerlink" title="第三步：简单配置"></a>第三步：简单配置</h1><p>在买好主机后（这里我买的是KVM架构，数据中心选的是洛杉矶QNET，因为采用了亚洲优化路线），登录到KiwiVM管理面板，准备把系统改成Ubuntu（<del>没错，朱军，我喜欢debian系！⊂彡☆))∀`)</del> 因为我最近一直在用Xbuntu，比较熟悉嘛。）</p>
+<h2 id="第三步：简单配置"><a href="#第三步：简单配置" class="headerlink" title="第三步：简单配置"></a>第三步：简单配置</h2><p>在买好主机后（这里我买的是KVM架构，数据中心选的是洛杉矶QNET，因为采用了亚洲优化路线），登录到KiwiVM管理面板，准备把系统改成Ubuntu（<del>没错，朱军，我喜欢debian系！⊂彡☆))∀`)</del> 因为我最近一直在用Xbuntu，比较熟悉嘛。）</p>
 <p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/1.PNG" alt="菜单栏"><br><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/2.PNG" alt="管理面板"></p>
 <p>首先在主管理界面点击“STOP”关机，然后通过左侧“Install new OS”进入系统选择页面，选择你想要改成的系统，并勾选“I agree that…”</p>
 <p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/3.PNG" alt="系统选择"></p>
@@ -207,7 +227,7 @@
 <p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/5.PNG" alt="Xshell"><br><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/6.PNG" alt="Xshell"></p>
 <p>当你填好后，进入模拟终端界面了，输入指令<code>apt-get update</code>，我这里遇到了<code>dpkg was interrupted, you must manually run &#39;dpkg --configure -a&#39; to correct the problem.</code>的报错，删掉/var/lib/dpkg/lock以及/var/lib/dpkg/updates/*，再重新update就好了。</p>
 <p><img src="/2017/06/10/BANDWAGONHOST-VPS%E6%90%AD%E5%BB%BASHADOWSOCKS-SERVER%E5%8F%8ABBR%E7%AE%97%E6%B3%95%E4%BC%98%E5%8C%96%E5%8A%A0%E9%80%9F%E7%9A%84%E8%AE%B0%E5%BD%95/7.PNG" alt="Shell"></p>
-<h1 id="第四步：配置SHADOWSOCKS-SERVER"><a href="#第四步：配置SHADOWSOCKS-SERVER" class="headerlink" title="第四步：配置SHADOWSOCKS SERVER"></a>第四步：配置SHADOWSOCKS SERVER</h1><p>先执行：</p>
+<h2 id="第四步：配置SHADOWSOCKS-SERVER"><a href="#第四步：配置SHADOWSOCKS-SERVER" class="headerlink" title="第四步：配置SHADOWSOCKS SERVER"></a>第四步：配置SHADOWSOCKS SERVER</h2><p>先执行：</p>
 <blockquote>
 <p>apt-get install build-essential</p>
 </blockquote>
@@ -259,7 +279,7 @@
 <blockquote>
 <p>ssserver -c /etc/shadowsocks.json -d stop</p>
 </blockquote>
-<h1 id="第五步：BBR算法优化"><a href="#第五步：BBR算法优化" class="headerlink" title="第五步：BBR算法优化"></a>第五步：BBR算法优化</h1><p>因为在Google在Kernel 4.9内核上加入BBR算法，所以需要将服务器内核更新为4.9以上，输入<code>uname –r</code>查看当前系统内核。我这里的内核是4.4的版本，所以需要更新更新方法如下：<br>到Ubuntu网站 <a href="http://kernel.ubuntu.com/~kernel-ppa/mainline/" target="_blank" rel="noopener">http://kernel.ubuntu.com/~kernel-ppa/mainline/</a> 查找所需Ubuntu内核版本目录。</p>
+<h2 id="第五步：BBR算法优化"><a href="#第五步：BBR算法优化" class="headerlink" title="第五步：BBR算法优化"></a>第五步：BBR算法优化</h2><p>因为在Google在Kernel 4.9内核上加入BBR算法，所以需要将服务器内核更新为4.9以上，输入<code>uname –r</code>查看当前系统内核。我这里的内核是4.4的版本，所以需要更新更新方法如下：<br>到Ubuntu网站 <a href="http://kernel.ubuntu.com/~kernel-ppa/mainline/" target="_blank" rel="noopener">http://kernel.ubuntu.com/~kernel-ppa/mainline/</a> 查找所需Ubuntu内核版本目录。</p>
 <p><em>如：<a href="http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb" target="_blank" rel="noopener">http://kernel.ubuntu.com/~kernel-ppa/mainline/v4.16/linux-image-4.16.0-041600-generic_4.16.0-041600.201804012230_amd64.deb</a></em></p>
 <p>然后输入：</p>
 <blockquote>
@@ -283,10 +303,28 @@
 </blockquote>
 <p>如果这两个输出都有“bbr”，则你的内核已经开启了bbr，执行<code>lsmod | grep bbr</code>看到有“tcp_bbr”模块即说明 bbr 已启动。</p>
 <p>至此，所有的配置已完毕。</p>
-<h1 id="第六步：客户端测试"><a href="#第六步：客户端测试" class="headerlink" title="第六步：客户端测试"></a>第六步：客户端测试</h1><p>各类客户端下载地址：<a href="https://shadowsocks.org/en/download/clients.html" target="_blank" rel="noopener">https://shadowsocks.org/en/download/clients.html</a></p>
+<h2 id="第六步：客户端测试"><a href="#第六步：客户端测试" class="headerlink" title="第六步：客户端测试"></a>第六步：客户端测试</h2><p>各类客户端下载地址：<a href="https://shadowsocks.org/en/download/clients.html" target="_blank" rel="noopener">https://shadowsocks.org/en/download/clients.html</a></p>
 
         </div>
 
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>Angel Hair</span>
+                    </p>
+                
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a href="http://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+
+            </section>
         
         <section class="post-tags">
             <div>
@@ -321,6 +359,29 @@
 
     </article>
 </div>
+
+
+    <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+<script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+<script src="//cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.js"></script>
+<div id="gitalk-container"></div>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '50a78039a642b3e969cf',
+        clientSecret: 'd747252c944bf94910270439687c98575f0b6f4f',
+        repo: 'Gitalk_comments',
+        owner: 'angel-hair',
+        admin: 'angel-hair',
+        id: md5(location.pathname),      
+        labels: 'Gitalk'.split(',').filter(l => l),
+        perPage: 8,
+        pagerDirection: 'last',
+        createIssueManually: true,
+        distractionFreeMode: false
+    })
+    gitalk.render('gitalk-container')      
+</script>
 
         </div>
         <footer id="footer" class="footer">
